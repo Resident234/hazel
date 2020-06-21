@@ -185,12 +185,13 @@ const spinner = () => {
 
 export function enableTranslation(API_KEY, LANGUAGE) {
   const comments = document.querySelectorAll('.js-comment-container');
+  const commentsHeaders = document.querySelectorAll('.timeline-comment-header');
   if (!comments.length) { return; }
+  if (!commentsHeaders.length) { return; }
   insertTranslateButton(comments);
 
-  document.querySelector('.js-discussion').addEventListener('click', (event) => {
-    if (isTranslateButton(event.target) || isTranslateButton(event.target.parentNode)) {
-      const commentBody = findCommentBody(event.target);
+    commentsHeaders.forEach((header) => {
+      const commentBody = header.nextElementSibling.querySelector('.comment-body');
       const commentParts = commentBody.parentElement.querySelectorAll(markdownTagSelector());
       const commentWrapper = commentBody.parentElement.parentElement;
 
@@ -237,7 +238,6 @@ export function enableTranslation(API_KEY, LANGUAGE) {
         }, (reason) => {
           console.log(reason);
         });
-    }
-  });
+    });
 };
 
