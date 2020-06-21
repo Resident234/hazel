@@ -13,8 +13,7 @@ image:https://raw.githubusercontent.com/outsideris/issue-translator-extention/ma
 4. Enter the API key in options for this Chrome extension.
 
 
-If you have API key:
-
+=== If you have API key:
 1. Download [the released file] and extract it.
 2. In link:chrome://extensions/[] of your Chrome, click `load unpacked extension` and pick above folder. (You have to turn on developer mode)
 1. Click options of this extension, enter your API key and choose your language which translates to.
