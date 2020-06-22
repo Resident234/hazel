@@ -10,7 +10,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*/*"
+        "https://*/*"
       ],
       "js": ["issue-translator.js"],
       "css": ["issue-translator.css"]
