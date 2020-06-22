@@ -39,11 +39,11 @@ const findCommentBody = (button) => {
   }
 };
 
-const markdownTagSelector = () => {
+const tagSelector = () => {
   const tags = ['p', 'ul', 'ol', 'blockquote', 'div.highlight', 'pre', 'div.email-fragment', 'table',
                 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr']
-  return tags.map((t) => { return 'td>'+t; })
-             .concat(tags.map((t) => { return '.comment-body>'+t; }))
+  return tags.map((t) => { return ''+t; })
+             .concat(tags.map((t) => { return ''+t; }))
              .join(', ');
 };
 
@@ -184,60 +184,40 @@ const spinner = () => {
 };
 
 export function enableTranslation(API_KEY, LANGUAGE) {
-  const comments = document.querySelectorAll('.js-comment-container');
-  const commentsHeaders = document.querySelectorAll('.timeline-comment-header');
-  if (!comments.length) { return; }
-  if (!commentsHeaders.length) { return; }
-  insertTranslateButton(comments);
+  const textTags = document.querySelectorAll(tagSelector());
+  if (!textTags.length) { return; }
 
-    commentsHeaders.forEach((header) => {
-      const commentBody = header.nextElementSibling.querySelector('.comment-body');
-      const commentParts = commentBody.parentElement.querySelectorAll(markdownTagSelector());
-      const commentWrapper = commentBody.parentElement.parentElement;
+  const promises = [...textTags].map((c, index) => {
+    return new Promise((resolve, reject) => {
+      // make some delay because the maximum rate limit of Google API is 10 qps per IP address.
+      // Otherwise Google return 403 with userRateLimitExceeded error.
+      const delay = (index/10) * 1000;
+      setTimeout(resolve, delay);
+    }).then(() => {
+      return translateHTML(c, API_KEY, LANGUAGE);
+    });
+  });
 
-      // prevent to translate twice
-      if (commentWrapper.querySelector('.issue-translated')) { return; }
+  Promise.all(promises)
+      .then((html) => {
+        textTags.forEach((tag, index) => {
+          //const commentBody = header.nextElementSibling.querySelector('.comment-body');
+          //const commentParts = commentBody.parentElement.querySelectorAll(markdownTagSelector());
+          //const commentWrapper = commentBody.parentElement.parentElement;
 
-      // show spinner
-      if (commentBody.matches('td')) {
-        const tr = document.createElement('tr');
-        tr.className = 'd-block issue-translated';
-        tr.setAttribute('style', 'border-top:1px solid #eee;');
-        tr.appendChild(spinner());
+          // prevent to translate twice
+          if (tag.querySelector('.js-translated')) { return; }
 
-        commentWrapper.appendChild(tr);
-      } else if (commentBody.matches('div.comment-body')) {
-        const div = document.createElement('div');
-        div.className = 'issue-translated';
-        div.setAttribute('style', 'border-top:1px solid #eee; padding-top:8px;');
-        div.appendChild(spinner());
-
-        commentBody.appendChild(div);
-      }
-
-      const promises = [...commentParts].map((c, index) => {
-        return new Promise((resolve, reject) => {
-          // make some delay because the maximum rate limit of Google API is 10 qps per IP address.
-          // Otherwise Google return 403 with userRateLimitExceeded error.
-          const delay = (index/10) * 1000;
-          setTimeout(resolve, delay);
-        }).then(() => {
-          return translateHTML(c, API_KEY, LANGUAGE);
+          // show spinner
+          const tagClone = tag.cloneNode(true);
+          tag.parentNode.insertBefore(tagClone, tag.nextSibling);
+          tag.className = tag.className + ' js-translated js-translator-original';
+          tagClone.className = tagClone.className + ' js-translated js-translator-clone';
+          tagClone.innerHTML = html[index];
         });
+      }, (reason) => {
+        console.log(reason);
       });
 
-      Promise.all(promises)
-        .then((html) => {
-          if (commentBody.matches('td')) {
-            const target = commentWrapper.querySelector('.issue-translated');
-            target.innerHTML = `<td class="${commentBody.className}">${html.join('')}</td>`;
-          } else if (commentBody.matches('div.comment-body')) {
-            const target = commentBody.querySelector('.issue-translated');
-            target.innerHTML = html.join('');
-          }
-        }, (reason) => {
-          console.log(reason);
-        });
-    });
 };
 
