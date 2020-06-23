@@ -40,8 +40,7 @@ const findCommentBody = (button) => {
 };
 
 const tagSelector = () => {
-  const tags = ['p', 'ul', 'ol', 'blockquote', 'div.highlight', 'pre', 'div.email-fragment', 'table',
-                'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr']
+  const tags = ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
   return tags.map((t) => { return ''+t; })
              .concat(tags.map((t) => { return ''+t; }))
              .join(', ');
@@ -151,7 +150,7 @@ export function restoreImagesAndLinks(text, links = [], images = []) {
     .replace(new RegExp(`${IMAGE_PLACEHOLDER}([0-9]+)`, 'g'), (matched, $1) => images[$1]);
 };
 
-const translateHTML = (c, API_KEY, LANGUAGE) => {
+const translateHTMLforMarkdown = (c, API_KEY, LANGUAGE) => {
   const html = c.outerHTML.replace(/\n/g, '');
 
   if (regexpCode.test(html) || c.matches('pre') || c.matches('div.highlight') ||
@@ -175,6 +174,29 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
   }
 };
 
+const translateHTML = (c, API_KEY, LANGUAGE) => {
+  const html = c.outerHTML.replace(/\n/g, '');
+
+  if (regexpCode.test(html) || c.matches('pre') || c.matches('div.highlight') ||
+      c.matches('table') || c.matches('hr')) {
+    return new Promise((resolve) => resolve(c.outerHTML));
+  } else { // other tags
+    const text = c.innerText;
+    return translate(text, API_KEY, LANGUAGE)
+      .then(function(result) {
+        let translated = result.data.translations[0].translatedText;
+        if (c.matches('ol, ul')) {
+          // keep a trailing whitespace in list
+          translated = translated.replace(/([0-9]+\.)([^\s]+)/g, '$1 $2')
+                                 .replace(/(\*)([^\s]+)/g, '$1 $2');
+        }
+        const translatedHTML = c;
+        translatedHTML.innerText = translated;
+        return translatedHTML;
+      });
+  }
+};
+
 const spinner = () => {
   const spinner = document.createElement('div');
   spinner.className = 'translator-spinner';
@@ -187,7 +209,20 @@ export function enableTranslation(API_KEY, LANGUAGE) {
   const textTags = document.querySelectorAll(tagSelector());
   if (!textTags.length) { return; }
 
-  const promises = [...textTags].map((c, index) => {
+  let clonedTextTags = [];
+  textTags.forEach((tag, index) => {
+    // prevent to translate twice
+    if (tag.querySelector('.js-translated')) { return; }
+
+    // show spinner
+    const tagClone = tag.cloneNode(true);
+    tag.parentNode.insertBefore(tagClone, tag.nextSibling);
+    tag.className = tag.className + ' js-translated js-translator-original';
+    tagClone.className = tagClone.className + ' js-translated js-translator-clone';
+    clonedTextTags.push(tagClone);
+  });
+
+  const promises = [...clonedTextTags].map((c, index) => {
     return new Promise((resolve, reject) => {
       // make some delay because the maximum rate limit of Google API is 10 qps per IP address.
       // Otherwise Google return 403 with userRateLimitExceeded error.
@@ -200,21 +235,7 @@ export function enableTranslation(API_KEY, LANGUAGE) {
 
   Promise.all(promises)
       .then((html) => {
-        textTags.forEach((tag, index) => {
-          //const commentBody = header.nextElementSibling.querySelector('.comment-body');
-          //const commentParts = commentBody.parentElement.querySelectorAll(markdownTagSelector());
-          //const commentWrapper = commentBody.parentElement.parentElement;
-
-          // prevent to translate twice
-          if (tag.querySelector('.js-translated')) { return; }
-
-          // show spinner
-          const tagClone = tag.cloneNode(true);
-          tag.parentNode.insertBefore(tagClone, tag.nextSibling);
-          tag.className = tag.className + ' js-translated js-translator-original';
-          tagClone.className = tagClone.className + ' js-translated js-translator-clone';
-          tagClone.innerHTML = html[index];
-        });
+        console.log(html);
       }, (reason) => {
         console.log(reason);
       });
