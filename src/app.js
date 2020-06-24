@@ -1,13 +1,11 @@
 import { enableTranslation } from './translate';
 
-let API_KEY = '';
+let API_KEY = 'AIzaSyDWbaaZOT0sLp_5OuK3EG7NLAJFi3Bv2tU';
 let LANGUAGE = '';
 
 chrome.storage.sync.get({
-  token: '',
-  lang: 'ko'
+  lang: 'ru'
 }, function(items) {
-  API_KEY = items.token;
   LANGUAGE = items.lang;
   if (!API_KEY) {
     console.error('There is no API key in options for GitHub Translation.');

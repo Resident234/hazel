@@ -14,8 +14,6 @@ You can download it in link:https://chrome.google.com/webstore/detail/issues-tra
 3. Make a new API key in link:https://console.cloud.google.com/apis/credentials[Credentials].
 4. Enter the API key in options for this Chrome extension.
 
-AIzaSyDWbaaZOT0sLp_5OuK3EG7NLAJFi3Bv2tU
-
 === If you have API key:
 1. Download [the released file] and extract it.
 2. In link:chrome://extensions/[] of your Chrome, click `load unpacked extension` and pick above folder. (You have to turn on developer mode)
