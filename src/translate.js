@@ -40,7 +40,7 @@ const findCommentBody = (button) => {
 };
 
 const tagSelector = () => {
-  const tags = ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+  const tags = ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span']
   return tags.map((t) => { return ''+t; })
              .concat(tags.map((t) => { return ''+t; }))
              .join(', ');
@@ -190,9 +190,8 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
           translated = translated.replace(/([0-9]+\.)([^\s]+)/g, '$1 $2')
                                  .replace(/(\*)([^\s]+)/g, '$1 $2');
         }
-        const translatedHTML = c;
-        translatedHTML.innerText = translated;
-        return translatedHTML;
+        c.innerText = translated;
+        return c;
       });
   }
 };
