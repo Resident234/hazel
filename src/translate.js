@@ -190,7 +190,7 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
           translated = translated.replace(/([0-9]+\.)([^\s]+)/g, '$1 $2')
                                  .replace(/(\*)([^\s]+)/g, '$1 $2');
         }
-        c.innerText = (" " + translated);
+        c.innerText += (" " + translated);
         return c;
       });
   }
@@ -205,23 +205,20 @@ const spinner = () => {
 };
 
 export function enableTranslation(API_KEY, LANGUAGE) {
-  const textTags = document.querySelectorAll(tagSelector());
-  if (!textTags.length) { return; }
+  const objTextTags = document.querySelectorAll(tagSelector());
+  if (!objTextTags.length) { return; }
 
-  let clonedTextTags = [];
-  textTags.forEach((tag, index) => {
+  let arTextTags = [];
+  objTextTags.forEach((tag, index) => {
     // prevent to translate twice
     if (tag.querySelector('.js-translated')) { return; }
 
     // show spinner
-    const tagClone = tag.cloneNode(true);
-    tag.parentNode.insertBefore(tagClone, tag.nextSibling);
-    tag.className = tag.className + ' js-translated js-translator-original';
-    tagClone.className = tagClone.className + ' js-translated js-translator-clone';
-    clonedTextTags.push(tagClone);
+    tag.className = tag.className + ' js-translated';
+    arTextTags.push(tag);
   });
 
-  const promises = [...clonedTextTags].map((c, index) => {
+  const promises = [...arTextTags].map((c, index) => {
     return new Promise((resolve, reject) => {
       // make some delay because the maximum rate limit of Google API is 10 qps per IP address.
       // Otherwise Google return 403 with userRateLimitExceeded error.
