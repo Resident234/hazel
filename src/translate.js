@@ -71,6 +71,23 @@ export function stripTags(html) {
     .replace(/<\/g-emoji>/g, '');
 };
 
+export function extractTags(html) {
+
+  /*return html
+      .replace(/<p.*?<\/p>/g, '')
+      .replace(/<blockquote.*?<\/blockquote>/g, '')
+      .replace(/<pre.*?<\/pre>/g, '')
+      .replace(/<h1.*?<\/h1>/g, '')
+      .replace(/<h2.*?<\/h2>/g, '')
+      .replace(/<h3.*?<\/h3>/g, '')
+      .replace(/<h4.*?<\/h4>/g, '')
+      .replace(/<h5.*?<\/h5>/g, '')
+      .replace(/<h6.*?<\/h6>/g, '')
+      .replace(/<span.*?<\/span>/g, '')
+      .replace(/<strong.*?<\/strong>/g, '')
+      .replace(/<li.*?<\/li>/g, '');*/
+};
+
 const convertTextToMarkdown = (text) => toMarkdown(stripTags(text), {gfm: true});
 
 const regexpMarkdownImage = /(!\[.+?\]\()(.+?)(\))/g;
@@ -150,30 +167,6 @@ export function restoreImagesAndLinks(text, links = [], images = []) {
     .replace(new RegExp(`${IMAGE_PLACEHOLDER}([0-9]+)`, 'g'), (matched, $1) => images[$1]);
 };
 
-const translateHTMLforMarkdown = (c, API_KEY, LANGUAGE) => {
-  const html = c.outerHTML.replace(/\n/g, '');
-
-  if (regexpCode.test(html) || c.matches('pre') || c.matches('div.highlight') ||
-      c.matches('table') || c.matches('hr')) {
-    return new Promise((resolve) => resolve(c.outerHTML));
-  } else { // other tags
-    const {replacedMarkdownText, images, links} = extractImagesAndLinks(convertTextToMarkdown(c.outerHTML));
-
-    return translate(replacedMarkdownText, API_KEY, LANGUAGE)
-      .then(function(result) {
-        let translated = normalizeMarkdownSyntax(result.data.translations[0].translatedText);
-        translated = restoreImagesAndLinks(translated, links, images);
-
-        if (c.matches('ol, ul')) {
-          // keep a trailing whitespace in list
-          translated = translated.replace(/([0-9]+\.)([^\s]+)/g, '$1 $2')
-                                 .replace(/(\*)([^\s]+)/g, '$1 $2');
-        }
-        return md.render(translated);
-      });
-  }
-};
-
 const translateHTML = (c, API_KEY, LANGUAGE) => {
   const html = c.outerHTML.replace(/\n/g, '');
 
@@ -181,16 +174,67 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
       c.matches('table') || c.matches('hr')) {
     return new Promise((resolve) => resolve(c.outerHTML));
   } else { // other tags
-    const text = c.innerText;
-    return translate(text, API_KEY, LANGUAGE)
+    let text = c.innerText;
+    let html = c.innerHTML;
+
+    //TODO: add tags dynamically from tagSelector()
+    //['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'strong', 'li']
+
+    /*let htmlTagsReplaced = html
+        .replace(/<p.+?"\s*>/g, '[|||||]').replace(/<\/p>/g, '[|||||]')
+        .replace(/<blockquote.+?"\s*>/g, '[|||||]').replace(/<\/blockquote>/g, '[|||||]')
+        .replace(/<pre.+?"\s*>/g, '[|||||]').replace(/<\/pre>/g, '[|||||]')
+        .replace(/<h1.+?"\s*>/g, '[|||||]').replace(/<\/h1>/g, '[|||||]')
+        .replace(/<h2.+?"\s*>/g, '[|||||]').replace(/<\/h2>/g, '[|||||]')
+        .replace(/<h3.+?"\s*>/g, '[|||||]').replace(/<\/h3>/g, '[|||||]')
+        .replace(/<h4.+?"\s*>/g, '[|||||]').replace(/<\/h4>/g, '[|||||]')
+        .replace(/<h5.+?"\s*>/g, '[|||||]').replace(/<\/h5>/g, '[|||||]')
+        .replace(/<h6.+?"\s*>/g, '[|||||]').replace(/<\/h6>/g, '[|||||]')
+        .replace(/<span.+?"\s*>/g, '[|||||]').replace(/<\/span>/g, '[|||||]')
+        .replace(/<strong.+?"\s*>/g, '[|||||]').replace(/<\/strong>/g, '[|||||]')
+        .replace(/<a.+?"\s*>/g, '[|||||]').replace(/<\/a>/g, '[|||||]')
+        .replace(/<div.+?"\s*>/g, '[|||||]').replace(/<\/div>/g, '[|||||]')
+        .replace(/<ul.+?"\s*>/g, '[|||||]').replace(/<\/ul>/g, '[|||||]')
+        .replace(/<img.+?"\s*>/g, '[|||||]')
+        .replace(/<i.+?"\s*>/g, '[|||||]').replace(/<\/i>/g, '[|||||]')
+        .replace(/<li.+?"\s*>/g, '[|||||]').replace(/<\/li>/g, '[|||||]');*/
+
+    let htmlTagsReplaced = html.replace(/(<([^>]+)>)/ig, '___')
+    //console.log(htmlTagsReplaced);
+
+    let textSplitted = [];
+    let tagsSplitted = [];
+    textSplitted = htmlTagsReplaced.split("___");
+    textSplitted = textSplitted.filter(function (el) {
+      return (el != null) && (el.trim() != "") && (el.trim() !== '\n');
+    });
+    if (textSplitted.length === 0) {
+      return new Promise((resolve) => resolve(c.outerHTML));
+    }
+    let tagsJoined = '';
+    textSplitted.forEach(function (textItem) {
+      tagsJoined += html.split(textItem).join('[|text|]');
+    });
+    tagsSplitted = tagsJoined.split('[|text|]');
+    //console.log(tagsSplitted);
+
+    return translate(htmlTagsReplaced, API_KEY, LANGUAGE)
       .then(function(result) {
         let translated = result.data.translations[0].translatedText;
-        if (c.matches('ol, ul')) {
-          // keep a trailing whitespace in list
-          translated = translated.replace(/([0-9]+\.)([^\s]+)/g, '$1 $2')
-                                 .replace(/(\*)([^\s]+)/g, '$1 $2');
-        }
-        c.innerText += (" " + translated);
+        translated = translated.replace(/[\n\t\r]/g, "");
+        translated = translated.replace(/___ ___/g, '______');//TODO: переписать эти замены
+        translated = translated.replace(/___  ___/g, '______');
+        translated = translated.replace(/____________/g, '___');
+        translated = translated.replace(/_________/g, '___');
+        translated = translated.replace(/______/g, '___');
+        //console.log(translated);
+        //console.log(tagsSplitted);
+        tagsSplitted.forEach(function (tagItem) {
+          translated = translated.replace('___', tagItem);
+        });
+        console.log(translated);
+        console.log('-----------');
+        c.innerHTML += (" " + translated);
         return c;
       });
   }
@@ -212,6 +256,12 @@ export function enableTranslation(API_KEY, LANGUAGE) {
   objTextTags.forEach((tag, index) => {
     // prevent to translate twice
     if (tag.querySelector('.js-translated')) { return; }
+    let elem = tag.parentNode;
+    for (; elem && elem !== document; elem = elem.parentNode) {
+      if (elem.matches(tagSelector())) {
+        return;
+      }
+    }
 
     // show spinner
     tag.className = tag.className + ' js-translated';
