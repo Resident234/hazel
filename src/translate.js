@@ -220,6 +220,7 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
 
     return translate(htmlTagsReplaced, API_KEY, LANGUAGE)
       .then(function(result) {
+        //console.log(htmlTagsReplaced);
         let translated = result.data.translations[0].translatedText;
         translated = translated.replace(/[\n\t\r]/g, "");
         translated = translated.replace(/___ ___/g, '______');//TODO: переписать эти замены
@@ -227,14 +228,48 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
         translated = translated.replace(/____________/g, '___');
         translated = translated.replace(/_________/g, '___');
         translated = translated.replace(/______/g, '___');
+
+        let originalText = htmlTagsReplaced;
+        originalText = originalText.replace(/[\n\t\r]/g, "");
+        originalText = originalText.replace(/___ ___/g, '______');//TODO: переписать эти замены
+        originalText = originalText.replace(/___  ___/g, '______');
+        originalText = originalText.replace(/____________/g, '___');
+        originalText = originalText.replace(/_________/g, '___');
+        originalText = originalText.replace(/______/g, '___');
+
+        let originalTextSplitted = [];
+        originalTextSplitted = originalText.split("___");
+
+        let translatedTextSplitted = [];
+        translatedTextSplitted = translated.split("___");
+
+        let resultTextSplitted = [];
+        for (let index = 0; index < originalTextSplitted.length; index++) {
+            resultTextSplitted[index] = "";
+            if (originalTextSplitted[index] !== "") {
+                resultTextSplitted[index] += originalTextSplitted[index].trim();
+            }
+            if (originalTextSplitted[index] !== "" && translatedTextSplitted[index] !== "") {
+                resultTextSplitted[index] += " ";
+            }
+            if (translatedTextSplitted[index] !== "") {
+                resultTextSplitted[index] += translatedTextSplitted[index].trim();
+            }
+        }
+        //let resultText = resultTextSplitted.join('___');
+        let resultText = "";
+
+        console.log(resultText);
+        console.log(tagsSplitted);
+        for (let index = 0; index < tagsSplitted.length; index++) {
+            resultText += resultTextSplitted[index] + tagsSplitted[index];
+        }
+              /*tagsSplitted.forEach(function (tagItem) {
+                translated = translated.replace('___', tagItem);
+              });*/
         //console.log(translated);
-        //console.log(tagsSplitted);
-        tagsSplitted.forEach(function (tagItem) {
-          translated = translated.replace('___', tagItem);
-        });
-        console.log(translated);
         console.log('-----------');
-        c.innerHTML += (" " + translated);
+        //c.innerHTML += (" " + translated);
         return c;
       });
   }
