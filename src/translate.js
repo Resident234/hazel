@@ -177,9 +177,6 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
     let text = c.innerText;
     let html = c.innerHTML;
 
-    //return new Promise((resolve) => resolve(c.outerHTML));
-
-
     return translate(text, API_KEY, LANGUAGE)
       .then(function(result) {
         let translated = result.data.translations[0].translatedText;
@@ -189,17 +186,30 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
         translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/______/g, '___');
         translatedDelimitersReplaced = translatedDelimitersReplaced.trim('___');
 
-        let originalDelimitersReplaced = text.trim().replace(/[\n\t\r]/g, "___").replace(/\. /g, ".___");
-        originalDelimitersReplaced = originalDelimitersReplaced.replace(/____________/g, '___');
-        originalDelimitersReplaced = originalDelimitersReplaced.replace(/_________/g, '___');
-        originalDelimitersReplaced = originalDelimitersReplaced.replace(/______/g, '___');
-        originalDelimitersReplaced = originalDelimitersReplaced.trim('___');
+        let originalTextDelimitersReplaced = text.trim().replace(/[\n\t\r]/g, "___").replace(/\. /g, ".___");
+        originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/____________/g, '___');
+        originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/_________/g, '___');
+        originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/______/g, '___');
+        originalTextDelimitersReplaced = originalTextDelimitersReplaced.trim('___');
 
-        let originalTextSplitted = originalDelimitersReplaced.split("___");
+        let originalHTMLDelimitersReplaced = html.trim().replace(/[\n\t\r]/g, "___").replace(/\. /g, ".___");
+        originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.replace(/____________/g, '___');
+        originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.replace(/_________/g, '___');
+        originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.replace(/______/g, '___');
+        originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.trim('___');
+
+        let originalTextSplitted = originalTextDelimitersReplaced.split("___");
+        let originalHTMLSplitted = originalHTMLDelimitersReplaced.split("___");
         let translatedTextSplitted = translatedDelimitersReplaced.split("___");
-
+        console.log(originalTextSplitted);
+        console.log(translatedTextSplitted);
+        console.log('---------------------');
         for (let index = 0; index < originalTextSplitted.length; index++) {
-          html = html.replace(originalTextSplitted[index], originalTextSplitted[index] + " " + translatedTextSplitted[index]);
+          let htmlReplaced = html.replace(originalTextSplitted[index], originalTextSplitted[index] + " " + translatedTextSplitted[index]);
+          if (html === htmlReplaced) {
+            htmlReplaced = html.replace(originalHTMLSplitted[index], originalTextSplitted[index] + " " + translatedTextSplitted[index]);
+          }
+          html = htmlReplaced;
         }
         c.innerHTML = html;
         return c;
