@@ -1,7 +1,7 @@
 {
-  "name": "issue-translator-for-github-chrome-extension",
+  "name": "translator-extention",
   "version": "0.4.0",
-  "description": "Issue Translator for GitHub",
+  "description": "Translator",
   "main": "background.js",
   "private": true,
   "dependencies": {
@@ -36,13 +36,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/outsideris/issue-translator-extention.git"
+    "url": "git+https://github.com/Resident234/translator-extention.git"
   },
   "keywords": [],
   "author": "Outsider",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/outsideris/issue-translator-extention/issues"
+    "url": "https://github.com/Resident234/translator-extention/issues"
   },
-  "homepage": "https://github.com/outsideris/issue-translator-extention#readme"
+  "homepage": "https://github.com/Resident234/translator-extention/blob/master/README.adoc"
 }
