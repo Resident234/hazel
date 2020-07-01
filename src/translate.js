@@ -177,102 +177,31 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
     let text = c.innerText;
     let html = c.innerHTML;
 
-    //TODO: add tags dynamically from tagSelector()
-    //['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'strong', 'li']
+    //return new Promise((resolve) => resolve(c.outerHTML));
 
-    /*let htmlTagsReplaced = html
-        .replace(/<p.+?"\s*>/g, '[|||||]').replace(/<\/p>/g, '[|||||]')
-        .replace(/<blockquote.+?"\s*>/g, '[|||||]').replace(/<\/blockquote>/g, '[|||||]')
-        .replace(/<pre.+?"\s*>/g, '[|||||]').replace(/<\/pre>/g, '[|||||]')
-        .replace(/<h1.+?"\s*>/g, '[|||||]').replace(/<\/h1>/g, '[|||||]')
-        .replace(/<h2.+?"\s*>/g, '[|||||]').replace(/<\/h2>/g, '[|||||]')
-        .replace(/<h3.+?"\s*>/g, '[|||||]').replace(/<\/h3>/g, '[|||||]')
-        .replace(/<h4.+?"\s*>/g, '[|||||]').replace(/<\/h4>/g, '[|||||]')
-        .replace(/<h5.+?"\s*>/g, '[|||||]').replace(/<\/h5>/g, '[|||||]')
-        .replace(/<h6.+?"\s*>/g, '[|||||]').replace(/<\/h6>/g, '[|||||]')
-        .replace(/<span.+?"\s*>/g, '[|||||]').replace(/<\/span>/g, '[|||||]')
-        .replace(/<strong.+?"\s*>/g, '[|||||]').replace(/<\/strong>/g, '[|||||]')
-        .replace(/<a.+?"\s*>/g, '[|||||]').replace(/<\/a>/g, '[|||||]')
-        .replace(/<div.+?"\s*>/g, '[|||||]').replace(/<\/div>/g, '[|||||]')
-        .replace(/<ul.+?"\s*>/g, '[|||||]').replace(/<\/ul>/g, '[|||||]')
-        .replace(/<img.+?"\s*>/g, '[|||||]')
-        .replace(/<i.+?"\s*>/g, '[|||||]').replace(/<\/i>/g, '[|||||]')
-        .replace(/<li.+?"\s*>/g, '[|||||]').replace(/<\/li>/g, '[|||||]');*/
 
-    let htmlTagsReplaced = html.replace(/(<([^>]+)>)/ig, '___')
-    //console.log(htmlTagsReplaced);
-
-    let textSplitted = [];
-    let tagsSplitted = [];
-    textSplitted = htmlTagsReplaced.split("___");
-    textSplitted = textSplitted.filter(function (el) {
-      return (el != null) && (el.trim() != "") && (el.trim() !== '\n');
-    });
-    if (textSplitted.length === 0) {
-      return new Promise((resolve) => resolve(c.outerHTML));
-    }
-    let tagsJoined = '';
-    textSplitted.forEach(function (textItem) {
-      tagsJoined += html.split(textItem).join('[|text|]');
-    });
-    tagsSplitted = tagsJoined.split('[|text|]');
-    //console.log(tagsSplitted);
-
-    return translate(htmlTagsReplaced, API_KEY, LANGUAGE)
+    return translate(text, API_KEY, LANGUAGE)
       .then(function(result) {
-        //console.log(htmlTagsReplaced);
         let translated = result.data.translations[0].translatedText;
-        translated = translated.replace(/[\n\t\r]/g, "");
-        translated = translated.replace(/___ ___/g, '______');//TODO: переписать эти замены
-        translated = translated.replace(/___  ___/g, '______');
-        translated = translated.replace(/____________/g, '___');
-        translated = translated.replace(/_________/g, '___');
-        translated = translated.replace(/______/g, '___');
+        let translatedDelimitersReplaced = translated.trim().replace(/[\n\t\r]/g, "___").replace(/\. /g, ".___");
+        translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/____________/g, '___');
+        translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/_________/g, '___');
+        translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/______/g, '___');
+        translatedDelimitersReplaced = translatedDelimitersReplaced.trim('___');
 
-        let originalText = htmlTagsReplaced;
-        originalText = originalText.replace(/[\n\t\r]/g, "");
-        originalText = originalText.replace(/___ ___/g, '______');//TODO: переписать эти замены
-        originalText = originalText.replace(/___  ___/g, '______');
-        originalText = originalText.replace(/____________/g, '___');
-        originalText = originalText.replace(/_________/g, '___');
-        originalText = originalText.replace(/______/g, '___');
+        let originalDelimitersReplaced = text.trim().replace(/[\n\t\r]/g, "___").replace(/\. /g, ".___");
+        originalDelimitersReplaced = originalDelimitersReplaced.replace(/____________/g, '___');
+        originalDelimitersReplaced = originalDelimitersReplaced.replace(/_________/g, '___');
+        originalDelimitersReplaced = originalDelimitersReplaced.replace(/______/g, '___');
+        originalDelimitersReplaced = originalDelimitersReplaced.trim('___');
 
-        let originalTextSplitted = [];
-        originalTextSplitted = originalText.split("___");
+        let originalTextSplitted = originalDelimitersReplaced.split("___");
+        let translatedTextSplitted = translatedDelimitersReplaced.split("___");
 
-        let translatedTextSplitted = [];
-        translatedTextSplitted = translated.split("___");
-
-        let resultTextSplitted = [];
         for (let index = 0; index < originalTextSplitted.length; index++) {
-            resultTextSplitted[index] = "";
-            if (originalTextSplitted[index] !== "") {
-                resultTextSplitted[index] += originalTextSplitted[index].trim();
-            }
-            if (originalTextSplitted[index] !== "" && translatedTextSplitted[index] !== "") {
-                resultTextSplitted[index] += " ";
-            }
-            if (translatedTextSplitted[index] !== "") {
-                resultTextSplitted[index] += translatedTextSplitted[index].trim();
-            }
+          html = html.replace(originalTextSplitted[index], originalTextSplitted[index] + " " + translatedTextSplitted[index]);
         }
-        //let resultText = resultTextSplitted.join('___');
-        let resultText = "";
-
-        //console.log(resultTextSplitted);
-        //console.log(tagsSplitted);
-        for (let index = 0; index < resultTextSplitted.length; index++) {
-            let tagsSplittedItem = '';
-            if (tagsSplitted[index] !== undefined) {
-                tagsSplittedItem = tagsSplitted[index];
-            }
-            //console.log(resultTextSplitted[index]);
-            console.log(tagsSplittedItem);
-            resultText += resultTextSplitted[index] + tagsSplittedItem;
-        }
-        console.log(resultText);
-        console.log('-----------');
-        //c.innerHTML += (" " + translated);
+        c.innerHTML = html;
         return c;
       });
   }
