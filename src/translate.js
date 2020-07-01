@@ -259,15 +259,18 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
         //let resultText = resultTextSplitted.join('___');
         let resultText = "";
 
-        console.log(resultText);
-        console.log(tagsSplitted);
-        for (let index = 0; index < tagsSplitted.length; index++) {
-            resultText += resultTextSplitted[index] + tagsSplitted[index];
+        //console.log(resultTextSplitted);
+        //console.log(tagsSplitted);
+        for (let index = 0; index < resultTextSplitted.length; index++) {
+            let tagsSplittedItem = '';
+            if (tagsSplitted[index] !== undefined) {
+                tagsSplittedItem = tagsSplitted[index];
+            }
+            //console.log(resultTextSplitted[index]);
+            console.log(tagsSplittedItem);
+            resultText += resultTextSplitted[index] + tagsSplittedItem;
         }
-              /*tagsSplitted.forEach(function (tagItem) {
-                translated = translated.replace('___', tagItem);
-              });*/
-        //console.log(translated);
+        console.log(resultText);
         console.log('-----------');
         //c.innerHTML += (" " + translated);
         return c;
