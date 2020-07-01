@@ -17,7 +17,8 @@ You can download it in link:https://chrome.google.com/webstore/detail/issues-tra
 === If you have API key:
 1. Download [the released file] and extract it.
 2. In link:chrome://extensions/[] of your Chrome, click `load unpacked extension` and pick above folder. (You have to turn on developer mode)
-3. Click options of this extension, enter your API key and choose your language which translates to.
+3. Enter your API key in app.js
+4. Click options of this extension, choose your language which translates to.
 
 Now, you can see a translation button on GitHub.
 
