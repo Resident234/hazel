@@ -1,10 +1,13 @@
 /* This spinner is from http://tobiasahlin.com/spinkit/ */
 .translator-spinner {
-  margin: 15px auto;
-  width: 50px;
-  height: 40px;
-  text-align: center;
-  font-size: 10px;
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    z-index: 9999999999 !important;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px;
 }
 
 .translator-spinner > div {
@@ -16,6 +19,10 @@
 
     -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
     animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.translator-spinner.hide {
+    display: none!important;
 }
 
 .translator-spinner .rect2 {
@@ -39,16 +46,21 @@
 }
 
 @-webkit-keyframes sk-stretchdelay {
-    0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-    20% { -webkit-transform: scaleY(1.0) }
+    0%, 40%, 100% {
+        -webkit-transform: scaleY(0.4)
+    }
+    20% {
+        -webkit-transform: scaleY(1.0)
+    }
 }
 
 @keyframes sk-stretchdelay {
     0%, 40%, 100% {
         transform: scaleY(0.4);
         -webkit-transform: scaleY(0.4);
-    }  20% {
-           transform: scaleY(1.0);
-           -webkit-transform: scaleY(1.0);
-       }
+    }
+    20% {
+        transform: scaleY(1.0);
+        -webkit-transform: scaleY(1.0);
+    }
 }

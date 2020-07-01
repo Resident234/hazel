@@ -186,19 +186,19 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
         return translate(text, API_KEY, LANGUAGE)
             .then(function (result) {
                 let translated = result.data.translations[0].translatedText;
-                let translatedDelimitersReplaced = translated.trim().replace(/\. /g, ".___"); //.replace(/[\n\t\r]/g, "___")
+                let translatedDelimitersReplaced = translated.trim().replace(/\. /g, ".___").replace(/\.[\n\t\r]/g, ".___"); //.replace(/[\n\t\r]/g, "___")
                 translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/____________/g, '___');
                 translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/_________/g, '___');
                 translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/______/g, '___');
                 translatedDelimitersReplaced = translatedDelimitersReplaced.trim('___');
 
-                let originalTextDelimitersReplaced = text.trim().replace(/\. /g, ".___");
+                let originalTextDelimitersReplaced = text.trim().replace(/\. /g, ".___").replace(/\.[\n\t\r]/g, ".___");
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/____________/g, '___');
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/_________/g, '___');
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/______/g, '___');
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.trim('___');
 
-                let originalHTMLDelimitersReplaced = html.trim().replace(/\. /g, ".___");
+                let originalHTMLDelimitersReplaced = html.trim().replace(/\. /g, ".___").replace(/\.[\n\t\r]/g, ".___");
                 originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.replace(/____________/g, '___');
                 originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.replace(/_________/g, '___');
                 originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.replace(/______/g, '___');
@@ -224,7 +224,7 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
 
 const spinner = () => {
     const spinner = document.createElement('div');
-    spinner.className = 'translator-spinner';
+    spinner.className = 'js-translator-spinner translator-spinner';
     spinner.innerHTML = '<div class="rect1"></div><div class="rect2"></div><div class="rect3"></div>' +
         '<div class="rect4"></div><div class="rect5"></div>';
     return spinner;
@@ -235,6 +235,7 @@ export function enableTranslation(API_KEY, LANGUAGE) {
     if (!objTextTags.length) {
         return;
     }
+    document.querySelector('body').appendChild(spinner());
 
     let arTextTags = [];
     objTextTags.forEach((tag, index) => {
@@ -249,7 +250,6 @@ export function enableTranslation(API_KEY, LANGUAGE) {
             }
         }
 
-        // show spinner
         tag.className = tag.className + ' js-translated';
         arTextTags.push(tag);
     });
@@ -267,6 +267,8 @@ export function enableTranslation(API_KEY, LANGUAGE) {
 
     Promise.all(promises)
         .then((html) => {
+            let spinner = document.querySelector('.js-translator-spinner');
+            spinner.className = spinner.className + ' hide';
             console.log(html);
         }, (reason) => {
             console.log(reason);
