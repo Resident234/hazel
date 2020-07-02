@@ -40,7 +40,7 @@ const findCommentBody = (button) => {
 };
 
 const tagSelector = () => {
-    const tags = ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'strong', 'li']
+    const tags = ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'strong', 'li', 'td']
     return tags.map((t) => {
         return '' + t;
     })
