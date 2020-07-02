@@ -165,6 +165,11 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
     } else { // other tags
         let text = c.innerText;
         let html = c.innerHTML;
+        console.log(text);
+
+        if (text.length === 1) {
+            return new Promise((resolve) => resolve(c.outerHTML));
+        }
 
         return translate(text, API_KEY, LANGUAGE)
             .then(function (result) {
@@ -190,9 +195,8 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                 let originalTextSplitted = originalTextDelimitersReplaced.split("___");
                 let originalHTMLSplitted = originalHTMLDelimitersReplaced.split("___");
                 let translatedTextSplitted = translatedDelimitersReplaced.split("___");
-                console.log(html);
                 for (let index = 0; index < originalTextSplitted.length; index++) {
-                    let originalText = originalTextSplitted[index];
+                    let originalText = originalHTMLSplitted[index];
                     let concatenatedReplaceText = originalText + " " + translatedTextSplitted[index];
                     if (originalText === translatedTextSplitted[index]) {
                         concatenatedReplaceText = originalText;
