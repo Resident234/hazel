@@ -75,23 +75,6 @@ export function stripTags(html) {
         .replace(/<\/g-emoji>/g, '');
 };
 
-export function extractTags(html) {
-
-    /*return html
-        .replace(/<p.*?<\/p>/g, '')
-        .replace(/<blockquote.*?<\/blockquote>/g, '')
-        .replace(/<pre.*?<\/pre>/g, '')
-        .replace(/<h1.*?<\/h1>/g, '')
-        .replace(/<h2.*?<\/h2>/g, '')
-        .replace(/<h3.*?<\/h3>/g, '')
-        .replace(/<h4.*?<\/h4>/g, '')
-        .replace(/<h5.*?<\/h5>/g, '')
-        .replace(/<h6.*?<\/h6>/g, '')
-        .replace(/<span.*?<\/span>/g, '')
-        .replace(/<strong.*?<\/strong>/g, '')
-        .replace(/<li.*?<\/li>/g, '');*/
-};
-
 const convertTextToMarkdown = (text) => toMarkdown(stripTags(text), {gfm: true});
 
 const regexpMarkdownImage = /(!\[.+?\]\()(.+?)(\))/g;
@@ -209,9 +192,15 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                 let translatedTextSplitted = translatedDelimitersReplaced.split("___");
                 console.log(html);
                 for (let index = 0; index < originalTextSplitted.length; index++) {
-                    let htmlReplaced = html.replace(originalTextSplitted[index], originalTextSplitted[index] + " " + translatedTextSplitted[index]);
+                    let originalText = originalTextSplitted[index];
+                    let concatenatedReplaceText = originalText + " " + translatedTextSplitted[index];
+                    if (originalText === translatedTextSplitted[index]) {
+                        concatenatedReplaceText = originalText;
+                    }
+                    let htmlReplaced = html.replace(originalText, concatenatedReplaceText);
                     if (html === htmlReplaced) {
-                        htmlReplaced = html.replace(originalHTMLSplitted[index], originalHTMLSplitted[index] + " " + translatedTextSplitted[index]);
+                        originalText = originalHTMLSplitted[index];
+                        htmlReplaced = html.replace(originalText, concatenatedReplaceText);
                     }
                     html = htmlReplaced;
                 }
