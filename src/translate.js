@@ -175,7 +175,8 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                 let translated = result.data.translations[0].translatedText;
                 let translatedDelimitersReplaced = translated.trim()
                     .replace(/\. /g, ".___")
-                    .replace(/\.[\n\t\r]/g, ".___");
+                    .replace(/\.[\n\t\r]/g, ".___")
+                    .replace(/[\n\t\r]/g, "___");
                 translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/____________/g, '___');
                 translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/_________/g, '___');
                 translatedDelimitersReplaced = translatedDelimitersReplaced.replace(/______/g, '___');
@@ -183,16 +184,20 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
 
                 let originalTextDelimitersReplaced = text.trim()
                     .replace(/\. /g, ".___")
-                    .replace(/\.[\n\t\r]/g, ".___");
+                    .replace(/\.[\n\t\r]/g, ".___")
+                    .replace(/[\n\t\r]/g, "___");
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/____________/g, '___');
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/_________/g, '___');
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.replace(/______/g, '___');
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.trim('___');
 
                 //TODO: exclude e.g.
+                console.log(html);
                 let originalHTMLDelimitersReplaced = html.trim()
                     .replace(/\. /g, ".___")
                     .replace(/\.[\n\t\r]/g, ".___")
+                    .replace(/<\/a>[\n\t\r]/g, "</a>___")
+                    .replace(/<\/li>[\n\t\r]/g, "</li>___")
                     .replace(/[\n\t\r]/g, " ");
                 originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.replace(/____________/g, '___');
                 originalHTMLDelimitersReplaced = originalHTMLDelimitersReplaced.replace(/_________/g, '___');
@@ -206,11 +211,13 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                 html = html.replace(/    /g, ' ');
                 html = html.replace(/     /g, ' ');
                 html = html.replace(/      /g, ' ');
-                console.log(html);
 
                 let originalTextSplitted = originalTextDelimitersReplaced.split("___");
                 let originalHTMLSplitted = originalHTMLDelimitersReplaced.split("___");
                 let translatedTextSplitted = translatedDelimitersReplaced.split("___");
+                console.log(originalTextSplitted);
+                console.log(translatedTextSplitted);
+                console.log(originalHTMLSplitted);
                 for (let index = 0; index < originalTextSplitted.length; index++) {
                     let originalText = originalHTMLSplitted[index];
                     originalText = originalText.replace(/[\n\t\r]/g, " ");
@@ -223,7 +230,6 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                     if (originalText === translatedTextSplitted[index]) {
                         concatenatedReplaceText = originalText;
                     }
-                    console.log(originalText);
                     let htmlReplaced = html.replace(originalText, concatenatedReplaceText);
                     if (html === htmlReplaced) {
                         originalText = originalHTMLSplitted[index];
