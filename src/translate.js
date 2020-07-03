@@ -172,6 +172,10 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
 
         return translate(text, API_KEY, LANGUAGE)
             .then(function (result) {
+                text = text.replace(/e.g./g, 'eg');
+                html = html.replace(/e.g./g, 'eg');
+                text = text.replace(/i.e./g, 'ie');
+                html = html.replace(/i.e./g, 'ie');
                 let translated = result.data.translations[0].translatedText;
                 let translatedDelimitersReplaced = translated.trim()
                     .replace(/\. /g, ".___")
@@ -220,12 +224,17 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                 console.log(originalHTMLSplitted);
                 for (let index = 0; index < originalTextSplitted.length; index++) {
                     let originalText = originalHTMLSplitted[index];
+                    originalText = originalText.trim();
                     originalText = originalText.replace(/[\n\t\r]/g, " ");
                     originalText = originalText.replace(/  /g, ' ');
                     originalText = originalText.replace(/   /g, ' ');
                     originalText = originalText.replace(/    /g, ' ');
                     originalText = originalText.replace(/     /g, ' ');
                     originalText = originalText.replace(/      /g, ' ');
+                    originalText = originalText.replace(/       /g, ' ');
+                    originalText = originalText.replace(/        /g, ' ');
+                    originalText = originalText.replace(/         /g, ' ');
+                    originalText = originalText.replace(/          /g, ' ');
                     let concatenatedReplaceText = originalText + " " + translatedTextSplitted[index];
                     if (originalText === translatedTextSplitted[index]) {
                         concatenatedReplaceText = originalText;
