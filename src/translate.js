@@ -177,6 +177,8 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                 text = text.replace(/i.e./g, 'ie');
                 html = html.replace(/i.e./g, 'ie');
                 let translated = result.data.translations[0].translatedText;
+                translated = translated.replace(/См./g, 'См');
+                translated = translated.replace(/см./g, 'см');
                 let translatedDelimitersReplaced = translated.trim()
                     .replace(/\. /g, ".___")
                     .replace(/\.[\n\t\r]/g, ".___")
