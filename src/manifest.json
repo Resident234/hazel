@@ -12,13 +12,14 @@
       "matches": [
         "https://*/*"
       ],
-      "js": ["issue-translator.js"],
-      "css": ["issue-translator.css"]
+      "js": ["translator.js"],
+      "css": ["style.css"]
     }
   ],
   "options_ui": {
     "page": "options.html",
-    "chrome_style": true
+    "chrome_style": true,
+    "open_in_tab": true
   },
   "background": {
     "scripts": ["background.js"],

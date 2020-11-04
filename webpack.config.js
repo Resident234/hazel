@@ -3,7 +3,7 @@ const {resolve} = require('path');
 module.exports = env => {
   return {
     entry: {
-      'issue-translator': './src/app.js'
+      'translator': './src/app.js'
     },
     output: {
       filename: '[name].js',

@@ -1,6 +1,7 @@
 import markdownit from 'markdown-it';
 import toMarkdown from 'to-markdown';
 import escapeStringRegexp from 'escape-string-regexp';
+import {spinner} from './components/spinner';
 
 const md = markdownit({html: true, linkify: true});
 
@@ -198,7 +199,7 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                 originalTextDelimitersReplaced = originalTextDelimitersReplaced.trim('___');
 
                 //TODO: exclude e.g.
-                console.log(html);
+                //console.log(html);
                 let originalHTMLDelimitersReplaced = html.trim()
                     .replace(/\. /g, ".___")
                     .replace(/\.[\n\t\r]/g, ".___")
@@ -221,9 +222,9 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                 let originalTextSplitted = originalTextDelimitersReplaced.split("___");
                 let originalHTMLSplitted = originalHTMLDelimitersReplaced.split("___");
                 let translatedTextSplitted = translatedDelimitersReplaced.split("___");
-                console.log(originalTextSplitted);
-                console.log(translatedTextSplitted);
-                console.log(originalHTMLSplitted);
+                //console.log(originalTextSplitted);
+                //console.log(translatedTextSplitted);
+                //console.log(originalHTMLSplitted);
                 for (let index = 0; index < originalTextSplitted.length; index++) {
                     let originalText = originalHTMLSplitted[index];
                     originalText = originalText.trim();
@@ -248,19 +249,11 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
                     }
                     html = htmlReplaced;
                 }
-                console.log('---------------------');
+                //console.log('---------------------');
                 c.innerHTML = html;
                 return c;
             });
     }
-};
-
-const spinner = () => {
-    const spinner = document.createElement('div');
-    spinner.className = 'js-translator-spinner translator-spinner';
-    spinner.innerHTML = '<div class="rect1"></div><div class="rect2"></div><div class="rect3"></div>' +
-        '<div class="rect4"></div><div class="rect5"></div>';
-    return spinner;
 };
 
 export function enableTranslation(API_KEY, LANGUAGE) {
@@ -268,6 +261,7 @@ export function enableTranslation(API_KEY, LANGUAGE) {
     if (!objTextTags.length) {
         return;
     }
+    console.log(spinner());
     document.querySelector('body').appendChild(spinner());
 
     let arTextTags = [];
@@ -302,9 +296,9 @@ export function enableTranslation(API_KEY, LANGUAGE) {
         .then((html) => {
             let spinner = document.querySelector('.js-translator-spinner');
             spinner.className = spinner.className + ' hide';
-            console.log(html);
+            //console.log(html);
         }, (reason) => {
-            console.log(reason);
+            //console.log(reason);
         });
 
 };
