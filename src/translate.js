@@ -1,5 +1,7 @@
 import escapeStringRegexp from 'escape-string-regexp';
 import {hideSpinner, showSpinner} from "./components/spinner";
+import {bodySelector, tagSelector} from "./services/tags";
+import {prepareDelimitersBeforeSubmitToTranslation} from "./services/delimiters";
 
 
 const translate = (text, API_KEY, LANGUAGE) => {
@@ -121,22 +123,24 @@ const translateHTML = (c, API_KEY, LANGUAGE) => {
 export function enableTranslation(API_KEY, LANGUAGE) {
     showSpinner();
 
-    /*let arTextTags = [];
-    objTextTags.forEach((tag, index) => {
-        // prevent to translate twice
-        if (tag.querySelector('.js-translated')) {
-            return;
-        }
-        let elem = tag.parentNode;
-        for (; elem && elem !== document; elem = elem.parentNode) {
-            if (elem.matches(tagSelector())) {
-                return;
-            }
-        }
+    const objTextTags = document.querySelectorAll(tagSelector());
+    if (!objTextTags.length) {
+        hideSpinner();
+        return;
+    }
 
-        tag.className = tag.className + ' js-translated';
-        arTextTags.push(tag);
-    });*/
+    objTextTags.forEach((tag, index) => {
+        if (tag.innerText.length > 0) {
+            tag.insertAdjacentHTML('beforeend', '<->');
+            tag.insertAdjacentHTML('afterbegin', '<->');
+            tag.className = tag.className + ' js-translator-delimiters-added';
+        }
+    });
+
+    let objBodyTag = document.querySelector(bodySelector());
+    let pageText = objBodyTag.innerText;
+    pageText = prepareDelimitersBeforeSubmitToTranslation(pageText);
+    console.log(pageText);
 
     /*
     const promises = [...arTextTags].map((c, index) => {
