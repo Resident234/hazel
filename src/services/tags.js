@@ -12,3 +12,11 @@ export const tagSelector = () => {
 export const bodySelector = () => {
     return 'body';
 };
+
+export const textTags = () => {
+    return document.querySelectorAll(tagSelector());
+}
+
+export const bodyTag = () => {
+    return document.querySelector(bodySelector());
+}

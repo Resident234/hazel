@@ -10,5 +10,6 @@ export function prepareDelimitersBeforeSubmitToTranslation(html) {
         .replace(/<-><-><-><->/g, '.')
         .replace(/<-><-><->/g, '.')
         .replace(/<-><->/g, '.')
-        .replace(/<->/g, '.');//TODO: регулярку нормальную составить
-};
+        .replace(/<->/g, '.')
+        .replace(/\.+/g, '.');//TODO: регулярку нормальную составить
+}
