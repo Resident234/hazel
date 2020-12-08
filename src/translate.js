@@ -1,8 +1,8 @@
-import escapeStringRegexp from 'escape-string-regexp';
 import {hideSpinner, showSpinner} from "./components/spinner";
-import {bodySelector, bodyTag, tagSelector, textTags} from "./services/tags";
+import {bodySelector, tags, textTags} from "./services/tags";
 import {prepareDelimitersBeforeSubmitToTranslation} from "./services/delimiters";
 import {prepareTranslatedText} from "./services/helpers";
+import md5 from 'crypto-js/md5';
 
 
 const translate = (text, API_KEY, LANGUAGE) => {
@@ -25,15 +25,55 @@ const translate = (text, API_KEY, LANGUAGE) => {
 const insertText2Page = (originalText, translatedText) => {
     let originalTextSplitted = originalText.split('.');
     let translatedTextSplitted = translatedText.split('.');
-    const body = bodyTag();
-    originalTextSplitted.forEach((text, index) => {
-        if (translatedTextSplitted[index]) {
-            body.innerHTML = body.innerHTML.replace(text, text + ' ' + translatedTextSplitted[index]);
+    const objTextTags = textTags();
+    let tagsFingerprints = [];
+    let tagsTree = [];
+    let tagsParents = [];
+    objTextTags.forEach((tag, index) => {
+        if (tag.innerText.length > 0) {
+            let fingerprint =
+                tag.className +
+                tag.getAttributeNames().join(' ') +
+                tag.id +
+                tag.localName +
+                tag.outerHTML +
+                tag.tagName +
+                tag.namespaceURI +
+                tag.nodeName +
+                tag.nodeValue +
+                tag.textContent;
+            let hash = md5(fingerprint);
+            tagsFingerprints[hash.toString()] = tag;
+
+            if (tags.includes(tag.parentElement.tagName.toLowerCase())) {
+                let parentTagFingerprint =
+                    tag.parentElement.className +
+                    tag.parentElement.getAttributeNames().join(' ') +
+                    tag.parentElement.id +
+                    tag.parentElement.localName +
+                    tag.parentElement.outerHTML +
+                    tag.parentElement.tagName +
+                    tag.parentElement.namespaceURI +
+                    tag.parentElement.nodeName +
+                    tag.parentElement.nodeValue +
+                    tag.parentElement.textContent;
+                tagsParents[hash] = md5(parentTagFingerprint).toString();
+            }
         }
     });
-    body.innerHTML = body.innerHTML.replaceAll(/<->/g, '');
-    body.innerHTML = body.innerHTML.replaceAll(/&lt;-&gt;/g, '');
-    console.log(body.innerHTML);
+    console.log(tagsParents);
+
+    /*const body = bodyTag();
+    let bodyInnerHTML = body.innerHTML;
+    originalTextSplitted.forEach((text, index) => {
+        if (translatedTextSplitted[index]) {
+            //bodyInnerHTML = bodyInnerHTML.replace(text, text + ' ' + translatedTextSplitted[index]);
+        }
+    });*/
+    //body.innerHTML = '';
+    //body.insertAdjacentHTML('afterbegin', bodyInnerHTML);
+    //body.innerHTML = body.innerHTML.replaceAll(/<->/g, '');
+    //body.innerHTML = body.innerHTML.replaceAll(/&lt;-&gt;/g, '');
 }
 
 export function enableTranslation(API_KEY, LANGUAGE) {
