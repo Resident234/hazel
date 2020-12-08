@@ -26,9 +26,11 @@ chrome.storage.sync.get({
 }, function(items) {
   LANGUAGE = items.lang;
   if (!API_KEY) {
-    console.error('There is no API key in options for GitHub Translation.');
+    console.error('There is no API key in options for Translation.');
   } else {
-    enableTranslation(API_KEY, LANGUAGE);
+    window.onload = function() {
+      enableTranslation(API_KEY, LANGUAGE);
+    }
   }
 });
 

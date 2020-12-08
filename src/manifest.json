@@ -13,7 +13,8 @@
         "https://*/*"
       ],
       "js": ["translator.js"],
-      "css": ["style.css"]
+      "css": ["style.css"],
+      "run_at": "document_end"
     }
   ],
   "options_ui": {
