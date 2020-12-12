@@ -29,6 +29,9 @@ const insertText2Page = (originalText, translatedText) => {
     let tagsFingerprints = [];
     let tagsTree = [];
     let tagsParents = [];
+    let tagsChilds = [];
+    let tagsLevels = [];
+    tagsLevels[0] = [];
     objTextTags.forEach((tag, index) => {
         if (tag.innerText.length > 0) {
             let fingerprint =
@@ -57,11 +60,36 @@ const insertText2Page = (originalText, translatedText) => {
                     tag.parentElement.nodeName +
                     tag.parentElement.nodeValue +
                     tag.parentElement.textContent;
-                tagsParents[hash] = md5(parentTagFingerprint).toString();
+                tagsParents[hash.toString()] = md5(parentTagFingerprint).toString();
+                if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
+                    tagsChilds[md5(parentTagFingerprint).toString()] = [];
+                }
+                tagsChilds[md5(parentTagFingerprint).toString()].push(hash.toString());
+            } else if (bodySelector() === tag.parentElement.tagName.toLowerCase()) {
+                tagsLevels[0].push(hash.toString());
             }
         }
     });
-    console.log(tagsParents);
+    let level = 0;
+    while (1) {
+        if (tagsLevels[level]) {
+            tagsLevels[level].forEach((tagHash, index) => {
+                if (tagsChilds[tagHash]) {
+                    let nextLevel = level + 1;
+                    if (tagsLevels[nextLevel]) {
+                        tagsLevels[nextLevel] = [...tagsLevels[nextLevel], ...tagsChilds[tagHash]];
+                    } else {
+                        tagsLevels[nextLevel] = [...tagsChilds[tagHash]];
+                    }
+                }
+            });
+            level++;
+        } else {
+            break;
+        }
+    }
+
+    console.log(tagsLevels);
 
     /*const body = bodyTag();
     let bodyInnerHTML = body.innerHTML;
