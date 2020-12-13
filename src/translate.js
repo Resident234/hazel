@@ -25,6 +25,10 @@ const translate = (text, API_KEY, LANGUAGE) => {
 const insertText2Page = (originalText, translatedText) => {
     let originalTextSplitted = originalText.split('.');
     let translatedTextSplitted = translatedText.split('.');
+
+    console.log(originalTextSplitted);
+    console.log(translatedTextSplitted);
+
     const objTextTags = textTags();
     let tagsFingerprints = [];
     let tagsTree = [];
@@ -73,7 +77,7 @@ const insertText2Page = (originalText, translatedText) => {
     let level = 0;
     while (1) {
         if (tagsLevels[level]) {
-            tagsLevels[level].forEach((tagHash, index) => {
+            tagsLevels[level].forEach((tagHash) => {
                 if (tagsChilds[tagHash]) {
                     let nextLevel = level + 1;
                     if (tagsLevels[nextLevel]) {
@@ -89,19 +93,20 @@ const insertText2Page = (originalText, translatedText) => {
         }
     }
 
-    console.log(tagsLevels);
+    tagsLevels[tagsLevels.length - 1].forEach((tagHash) => {
+        let tag = tagsFingerprints[tagHash];
+        tag.innerHTML.match(/&lt;-&gt;(.*?)&lt;-&gt;/g).map(function (originalTextFramedDelimiters) {
+            let originalText = originalTextFramedDelimiters.replace(/&lt;-&gt;/g, '');
 
-    /*const body = bodyTag();
-    let bodyInnerHTML = body.innerHTML;
-    originalTextSplitted.forEach((text, index) => {
-        if (translatedTextSplitted[index]) {
-            //bodyInnerHTML = bodyInnerHTML.replace(text, text + ' ' + translatedTextSplitted[index]);
-        }
-    });*/
-    //body.innerHTML = '';
-    //body.insertAdjacentHTML('afterbegin', bodyInnerHTML);
-    //body.innerHTML = body.innerHTML.replaceAll(/<->/g, '');
-    //body.innerHTML = body.innerHTML.replaceAll(/&lt;-&gt;/g, '');
+            let translateIndex = originalTextSplitted.findIndex((element) => element === originalText);
+            if (translateIndex) {
+                tag.innerHTML = tag.innerHTML.replace('&lt;-&gt;' + originalText + '&lt;-&gt;', translatedTextSplitted[translateIndex]);
+                originalTextSplitted.splice(translateIndex, 1);
+                translatedTextSplitted.splice(translateIndex, 1);
+            }
+        });
+    });
+
 }
 
 export function enableTranslation(API_KEY, LANGUAGE) {
