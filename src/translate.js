@@ -1,6 +1,6 @@
 import {hideSpinner, showSpinner} from "./components/spinner";
 import {bodySelector, tags, textTags} from "./services/tags";
-import {DELIMITER_HTML, prepareDelimitersBeforeSubmitToTranslation} from "./components/delimiters";
+import {DELIMITER_HTML, hideDelimitersOnDOM, prepareDelimitersBeforeSubmitToTranslation} from "./components/delimiters";
 import {prepareTranslatedText} from "./services/helpers";
 import md5 from 'crypto-js/md5';
 
@@ -105,11 +105,7 @@ const insertText2Page = (originalText, translatedText) => {
         });
         tagsLevel--;
     }
-    let divsToHide = document.getElementsByClassName("js-translator-delimiter");
-    for(let i = 0; i < divsToHide.length; i++){
-        divsToHide[i].className = divsToHide[i].className + ' hide';
-    }
-
+    hideDelimitersOnDOM();
 }
 
 export function enableTranslation(API_KEY, LANGUAGE) {
