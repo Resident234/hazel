@@ -29,7 +29,8 @@ chrome.storage.sync.get({
     console.error('There is no API key in options for Translation.');
   } else {
     window.onload = function() {
-      enableTranslation(API_KEY, LANGUAGE);
+      setTimeout(enableTranslation(API_KEY, LANGUAGE), 5000);//TODO: придуамть как дождаться отработки всех лоадеров на странице
+      //TODO: сделать запуск только по кнопке
     }
   }
 });
