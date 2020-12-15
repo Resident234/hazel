@@ -1,3 +1,7 @@
 export function prepareTranslatedText(text) {
-    return text[0]['data']['translations'][0]['translatedText'];
+    let textPrepared = [];
+    text.forEach((item) => {
+        textPrepared.push(item['data']['translations'][0]['translatedText']);
+    });
+    return textPrepared;
 }

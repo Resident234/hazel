@@ -1,6 +1,6 @@
 import {hideSpinner, showSpinner} from "./components/spinner";
 import {bodySelector, tags, textTags} from "./services/tags";
-import {prepareDelimitersBeforeSubmitToTranslation} from "./services/delimiters";
+import {DELIMITER_HTML, prepareDelimitersBeforeSubmitToTranslation} from "./components/delimiters";
 import {prepareTranslatedText} from "./services/helpers";
 import md5 from 'crypto-js/md5';
 
@@ -23,11 +23,8 @@ const translate = (text, API_KEY, LANGUAGE) => {
 };
 
 const insertText2Page = (originalText, translatedText) => {
-    let originalTextSplitted = originalText.split('.');
-    let translatedTextSplitted = translatedText.split('.');
-
-    console.log(originalTextSplitted);
-    console.log(translatedTextSplitted);
+    let originalTextSplitted = originalText;
+    let translatedTextSplitted = translatedText;
 
     const objTextTags = textTags();
     let tagsFingerprints = [];
@@ -92,20 +89,26 @@ const insertText2Page = (originalText, translatedText) => {
             break;
         }
     }
-
-    tagsLevels[tagsLevels.length - 1].forEach((tagHash) => {
-        let tag = tagsFingerprints[tagHash];
-        tag.innerHTML.match(/&lt;-&gt;(.*?)&lt;-&gt;/g).map(function (originalTextFramedDelimiters) {
-            let originalText = originalTextFramedDelimiters.replace(/&lt;-&gt;/g, '');
-
-            let translateIndex = originalTextSplitted.findIndex((element) => element === originalText);
-            if (translateIndex) {
-                tag.innerHTML = tag.innerHTML.replace('&lt;-&gt;' + originalText + '&lt;-&gt;', translatedTextSplitted[translateIndex]);
-                originalTextSplitted.splice(translateIndex, 1);
-                translatedTextSplitted.splice(translateIndex, 1);
-            }
+    console.log(originalTextSplitted);
+    console.log(translatedTextSplitted);
+    let tagsLevel = tagsLevels.length - 1;
+    while (tagsLevel > 0) {
+        tagsLevels[tagsLevel].forEach((tagHash) => {
+            let tag = tagsFingerprints[tagHash];
+            originalTextSplitted.forEach((originalTextItem, translateIndex) => {
+                if(tag.innerHTML.includes(originalTextItem)) {
+                    tag.innerHTML = tag.innerHTML.replace(originalTextItem, originalTextItem + ' ' + translatedTextSplitted[translateIndex]);
+                    originalTextSplitted.splice(translateIndex, 1);
+                    translatedTextSplitted.splice(translateIndex, 1);
+                }
+            });
         });
-    });
+        tagsLevel--;
+    }
+    let divsToHide = document.getElementsByClassName("js-translator-delimiter");
+    for(let i = 0; i < divsToHide.length; i++){
+        divsToHide[i].className = divsToHide[i].className + ' hide';
+    }
 
 }
 
@@ -120,8 +123,8 @@ export function enableTranslation(API_KEY, LANGUAGE) {
 
     objTextTags.forEach((tag, index) => {
         if (tag.innerText.length > 0) {
-            tag.insertAdjacentHTML('beforeend', '<->');
-            tag.insertAdjacentHTML('afterbegin', '<->');
+            tag.insertAdjacentHTML('beforeend', DELIMITER_HTML);
+            tag.insertAdjacentHTML('afterbegin', DELIMITER_HTML);
             tag.className = tag.className + ' js-translator-delimiters-added';
         }
     });
@@ -129,9 +132,9 @@ export function enableTranslation(API_KEY, LANGUAGE) {
     let objBodyTag = document.querySelector(bodySelector());
     let pageText = objBodyTag.innerText;
     pageText = prepareDelimitersBeforeSubmitToTranslation(pageText);
-
+    let pageTextSplitted = pageText.split('.');
     //TODO: скорее всего текст делить на части и засылать частями
-    const promises = [pageText].map((c, index) => {
+    const promises = pageTextSplitted.map((c, index) => {
         return new Promise((resolve, reject) => {
             // make some delay because the maximum rate limit of Google API is 10 qps per IP address.
             // Otherwise Google return 403 with userRateLimitExceeded error.
@@ -145,7 +148,7 @@ export function enableTranslation(API_KEY, LANGUAGE) {
     Promise.all(promises)
         .then((text) => {
             text = prepareTranslatedText(text);
-            insertText2Page(pageText, text);
+            insertText2Page(pageTextSplitted, text);
             hideSpinner();
         }, (reason) => {
             //console.log(reason);

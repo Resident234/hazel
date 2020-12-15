@@ -1,4 +1,4 @@
-export const tags = ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'strong', 'li', 'td', 'div', 'a'];
+export const tags = ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'strong', 'li', 'td', 'div', 'a', 'option'];
 export const tagSelector = () => {
     return tags.map((t) => {
         return '' + t;

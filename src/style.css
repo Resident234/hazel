@@ -64,3 +64,8 @@
         -webkit-transform: scaleY(1.0);
     }
 }
+
+/** delimiter **/
+.translator-delimiter.hide {
+    display: none!important;
+}
