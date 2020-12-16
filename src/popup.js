@@ -4,4 +4,5 @@ const port = chrome.extension.connect({
 });
 runButton[0].addEventListener("click", function () {
     port.postMessage("rerun");
+    window.close();
 });
