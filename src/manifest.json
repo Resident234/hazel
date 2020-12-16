@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Translator",
-  "version": "0.4.0",
-  "description": "TODO: description",
+  "name": "OnPage Translator",
+  "version": "0.5.0",
+  "description": "On-page text translator",
   "homepage_url": "https://github.com/Resident234/translator-extention",
   "icons": {
     "128": "translation-128.png"
@@ -29,5 +29,9 @@
   "permissions": [
     "storage",
     "webNavigation"
-  ]
+  ],
+  "browser_action": {
+    "default_title": "Open action bar",
+    "default_popup": "popup.html"
+  }
 }

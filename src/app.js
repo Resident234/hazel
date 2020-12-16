@@ -28,13 +28,14 @@ chrome.storage.sync.get({
   if (!API_KEY) {
     console.error('There is no API key in options for Translation.');
   } else {
-    window.onload = function() {
+    /*window.onload = function() {
       setTimeout(enableTranslation(API_KEY, LANGUAGE), 5000);//TODO: придуамть как дождаться отработки всех лоадеров на странице
       //TODO: сделать запуск только по кнопке
-    }
+    }*/
   }
 });
 
+/*
 chrome.extension.onMessage.addListener(function(msg) {
   if (msg.action === 'rerun') {
     if (msg.url === location.href) {
@@ -42,3 +43,4 @@ chrome.extension.onMessage.addListener(function(msg) {
     }
   }
 });
+*/
