@@ -1,6 +1,6 @@
 import { enableTranslation } from './translate';
+import {API_KEY} from "./vars";
 
-let API_KEY = 'AIzaSyDWbaaZOT0sLp_5OuK3EG7NLAJFi3Bv2tU';
 let LANGUAGE = '';
 
 /**
@@ -35,12 +35,11 @@ chrome.storage.sync.get({
   }
 });
 
-/*
+
 chrome.extension.onMessage.addListener(function(msg) {
   if (msg.action === 'rerun') {
-    if (msg.url === location.href) {
+    //if (msg.url === location.href) {
       enableTranslation(API_KEY, LANGUAGE);
-    }
+    //}
   }
 });
-*/
