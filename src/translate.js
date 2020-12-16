@@ -1,7 +1,8 @@
 import {hideSpinner, showSpinner} from "./components/spinner";
 import {bodySelector, textTags} from "./services/tags";
 import {
-    DELIMITER_FOR_TRANSLATED_TEXT, hideDelimitersOnDOM,
+    DELIMITER_FOR_TRANSLATED_TEXT,
+    hideDelimitersOnDOM,
     insertDelimitersOnDOM,
     prepareDelimitersBeforeSubmitToTranslation
 } from "./components/delimiters";
@@ -34,12 +35,13 @@ export function enableTranslation(API_KEY, LANGUAGE) {
         });
     });
 
-    Promise.all(promises)
+    return Promise.all(promises)
         .then((text) => {
             text = prepareTranslatedText(text);
             insertText2Page(pageTextSplitted, text);
             hideDelimitersOnDOM();
             hideSpinner();
-        }, () => {});
+        }, () => {
+        });
 }
 

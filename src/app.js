@@ -1,5 +1,6 @@
 import { enableTranslation } from './translate';
 import {API_KEY} from "./vars";
+import {hasIsTranslated, setIsTranslated} from "./services/dom";
 
 let LANGUAGE = '';
 
@@ -26,20 +27,16 @@ chrome.storage.sync.get({
 }, function(items) {
   LANGUAGE = items.lang;
   if (!API_KEY) {
-    console.error('There is no API key in options for Translation.');
-  } else {
-    /*window.onload = function() {
-      setTimeout(enableTranslation(API_KEY, LANGUAGE), 5000);//TODO: придуамть как дождаться отработки всех лоадеров на странице
-      //TODO: сделать запуск только по кнопке
-    }*/
+    console.error('There is no API key in options for translation.');
   }
 });
 
 
 chrome.extension.onMessage.addListener(function(msg) {
-  if (msg.action === 'rerun') {
-    //if (msg.url === location.href) {
-      enableTranslation(API_KEY, LANGUAGE);
-    //}
+  if (msg.action === 'rerun' && !hasIsTranslated()) {
+    setIsTranslated();//TODO: translate is running
+    Promise.all([enableTranslation(API_KEY, LANGUAGE)]).then(() => {
+      setIsTranslated();
+    });
   }
 });

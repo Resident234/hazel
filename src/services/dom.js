@@ -1,5 +1,6 @@
-import {bodySelector, tags, textTags} from "./tags";
+import {bodySelector, bodyTag, tags, textTags} from "./tags";
 import md5 from "crypto-js/md5";
+import {DELIMITER_HTML} from "../components/delimiters";
 
 export const insertText2Page = (originalText, translatedText) => {
     let originalTextSplitted = originalText;
@@ -80,4 +81,14 @@ export const insertText2Page = (originalText, translatedText) => {
         tagsLevel--;
     }
 
+}
+
+export const setIsTranslated = () => {
+    const objBodyTag = bodyTag();
+    objBodyTag.classList.add('js-translator-is-translated');
+}
+
+export const hasIsTranslated = () => {
+    const objBodyTag = bodyTag();
+    return objBodyTag.classList.contains('js-translator-is-translated');
 }
