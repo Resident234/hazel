@@ -5,14 +5,24 @@
   "description": "On-page text translator",
   "homepage_url": "https://github.com/Resident234/translator-extention",
   "icons": {
-    "128": "translation-128.png"
+    "16": "cropped-logo_dark@2x-32x32.png",
+    "48": "cropped-logo_dark@2x-180x180.png",
+    "128": "cropped-logo_dark@2x-192x192.png"
   },
   "content_scripts": [
     {
       "matches": [
         "https://*/*"
       ],
-      "js": ["translator.js"],
+      "js": [
+        "translator.js",
+        "jquery.min.content.js",
+        "jquery-migrate.min.content.js",
+        "jquery.blockUI.min.content.js",
+        "jquery-appear.min.content.js",
+        "core.min.content.js",
+        "typed.min.content.js"
+      ],
       "css": ["style.css"],
       "run_at": "document_end"
     }
