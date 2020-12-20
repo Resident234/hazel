@@ -8,28 +8,7 @@ const spinner = () => {
         "style=\"text-align:left;\">" +
         "<span id=\"typed-31290215265fdf3912d95f8\" class=\"ultimate-typed-main \" " +
         "style=\"color:#ffffff; font-family:&#039;Hind&#039;;font-weight:500; text-transform: unset;\"></span>" +
-        "<script type=\"text/javascript\">" +
-        " \n" +
-        "\t\t\t\t\t\tjQuery(function($){ \n" +
-        "\t\t\t\t\t\t\t$(document).ready(function(){\n" +
-        "\t\t\t\t\t\t\t\tif( typeof jQuery(\"#typed-31290215265fdf3912d95f8\").typed == \"function\"){\n" +
-        "\t\t\t\t\t\t\t\t\t$(\"#typed-31290215265fdf3912d95f8\").typed({\n" +
-        "\t\t\t\t\t\t\t\t\t\tstrings: [\"DESIGNERS\",\"ILLUSTRATORS\",\"TOP CODERS\",\"SEO KINGS\",\"WRITERS\",\"\"],\n" +
-        "\t\t\t\t\t\t\t\t\t\ttypeSpeed: 100,\n" +
-        "\t\t\t\t\t\t\t\t\t\tbackSpeed: 100,\n" +
-        "\t\t\t\t\t\t\t\t\t\tstartDelay: 0,\n" +
-        "\t\t\t\t\t\t\t\t\t\tbackDelay: 3500,\n" +
-        "\t\t\t\t\t\t\t\t\t\tloop: true,\n" +
-        "\t\t\t\t\t\t\t\t\t\tloopCount: false,\n" +
-        "\t\t\t\t\t\t\t\t\t\tshowCursor: true,\n" +
-        "\t\t\t\t\t\t\t\t\t\tcursorChar: \"_\",\n" +
-        "\t\t\t\t\t\t\t\t\t\tattr: null\n" +
-        "\t\t\t\t\t\t\t\t\t});\n" +
-        "\t\t\t\t\t\t\t\t}\n" +
-        "\t\t\t\t\t\t\t});\n" +
-        "\t\t\t\t\t\t});\n" +
-        "\t\t\t\t\t" +
-        "</script><style>" +
+        "<style>" +
         ".uvc-wrap-31290215265fdf3912d95f8 .typed-cursor {" +
             "color:#ffffff;" +
         "}" +
@@ -43,7 +22,7 @@ export function showSpinner() {
     jQuery(function ($) {
         if (typeof jQuery("#typed-31290215265fdf3912d95f8").typed == "function") {
             $("#typed-31290215265fdf3912d95f8").typed({
-                strings: ["DESIGNERS", "ILLUSTRATORS", "TOP CODERS", "SEO KINGS", "WRITERS", ""],
+                strings: ["Please wait...".toUpperCase(), "Text translation in progress...".toUpperCase()],
                 typeSpeed: 100,
                 backSpeed: 100,
                 startDelay: 0,
