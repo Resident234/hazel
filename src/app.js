@@ -30,13 +30,18 @@ chrome.storage.sync.get({
     console.error('There is no API key in options for translation.');
   }
 });
+const portHasTranslated = chrome.extension.connect({
+  name: "hasTranslated"
+});
 
-
-chrome.extension.onMessage.addListener(function(msg) {
+chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
   if (msg.action === 'rerun' && !hasIsTranslated()) {
     setIsTranslated();//TODO: translate is running
     Promise.all([enableTranslation(API_KEY, LANGUAGE)]).then(() => {
       setIsTranslated();
     });
+  }
+  if (msg.action === 'hasTranslated') {
+    sendResponse({hasTranslated: hasIsTranslated()});
   }
 });
