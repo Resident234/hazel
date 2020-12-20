@@ -72,7 +72,9 @@ export const insertText2Page = (originalText, translatedText) => {
             let tag = tagsFingerprints[tagHash];
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
                 if(tag.innerHTML.includes(originalTextItem)) {
-                    tag.innerHTML = tag.innerHTML.replace(originalTextItem, originalTextItem + ' ' + translatedTextSplitted[translateIndex]);
+                    if (originalTextItem !== translatedTextSplitted[translateIndex]) {
+                        tag.innerHTML = tag.innerHTML.replace(originalTextItem, originalTextItem + ' ' + translatedTextSplitted[translateIndex]);
+                    }
                     originalTextSplitted.splice(translateIndex, 1);
                     translatedTextSplitted.splice(translateIndex, 1);
                 }
