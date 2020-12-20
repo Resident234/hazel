@@ -73,7 +73,7 @@ export const insertText2Page = (originalText, translatedText) => {
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
                 if(tag.innerHTML.includes(originalTextItem)) {
                     if (originalTextItem !== translatedTextSplitted[translateIndex]) {
-                        tag.innerHTML = tag.innerHTML.replace(originalTextItem, originalTextItem + ' ' + translatedTextSplitted[translateIndex]);
+                        tag.innerHTML = tag.innerHTML.replace(originalTextItem, originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, ""));
                     }
                     originalTextSplitted.splice(translateIndex, 1);
                     translatedTextSplitted.splice(translateIndex, 1);
