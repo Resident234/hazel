@@ -9,9 +9,10 @@ const spinner = () => {
         "<span id=\"typed-31290215265fdf3912d95f8\" class=\"ultimate-typed-main \" " +
         "style=\"color:#ffffff; font-family:&#039;Hind&#039;;font-weight:500; text-transform: unset;\"></span>" +
         "<style>" +
+        "@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap');" +
         ".uvc-wrap-31290215265fdf3912d95f8 .typed-cursor {" +
             "color:#ffffff;" +
-        "}" +
+        "}\n" +
         "</style></div>";
 
     return spinner;
