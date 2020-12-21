@@ -27085,9 +27085,9 @@ body:not(.rtl) #main {
     transition: right 400ms ease;
     position: relative;
     right: 0;
-    left: ;
     float: left;
     width: 100%;
+    height: auto;
 }
 
 body:not(.rtl) #main header {
