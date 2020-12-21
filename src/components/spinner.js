@@ -22,9 +22,9 @@ export function showSpinner() {
     jQuery(function ($) {
         if (typeof jQuery("#typed-31290215265fdf3912d95f8").typed == "function") {
             $("#typed-31290215265fdf3912d95f8").typed({
-                strings: ["Please wait...".toUpperCase(), "Text translation in progress...".toUpperCase()],
-                typeSpeed: 100,
-                backSpeed: 100,
+                strings: ["Please wait".toUpperCase(), "Text translation in progress".toUpperCase()],
+                typeSpeed: 30,
+                backSpeed: 30,
                 startDelay: 0,
                 backDelay: 3500,
                 loop: true,
