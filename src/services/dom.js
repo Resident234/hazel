@@ -74,14 +74,19 @@ export const insertText2Page = (originalText, translatedText) => {
             let tag = tagsFingerprints[tagHash];
             if (!tag.classList.contains('js-translator-delimiter')) {
                 originalTextSplitted.forEach((originalTextItem, translateIndex) => {
-                    console.log('innerHTML:');
-                    console.log(tag.innerHTML);
-                    console.log('originalTextItem:');
-                    console.log(originalTextItem);
-                    console.log('------------------');
+
                     if (tag.innerHTML.includes(originalTextItem)) {
                         if (originalTextItem !== translatedTextSplitted[translateIndex]) {
                             tag.innerHTML = tag.innerHTML.replace(originalTextItem, originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, ""));
+                        }
+                        originalTextSplitted.splice(translateIndex, 1);
+                        translatedTextSplitted.splice(translateIndex, 1);
+                    } else if (tag.innerHTML.toLowerCase().includes(originalTextItem.toLowerCase())) {
+                        if (originalTextItem.toLowerCase() !== translatedTextSplitted[translateIndex].toLowerCase()) {
+                            console.log('innerHTML:' + tag.innerHTML);
+                            console.log('originalTextItem:' + originalTextItem);
+                            console.log('------------------');
+                            tag.innerHTML = tag.innerHTML.replace(new RegExp(originalTextItem.toLowerCase(),"gim"), originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, ""));
                         }
                         originalTextSplitted.splice(translateIndex, 1);
                         translatedTextSplitted.splice(translateIndex, 1);
