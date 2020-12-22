@@ -6,6 +6,8 @@ export const insertText2Page = (originalText, translatedText) => {
     let originalTextSplitted = originalText;
     let translatedTextSplitted = translatedText;
 
+    //console.log(originalTextSplitted);
+    //console.log(translatedTextSplitted);
     const objTextTags = textTags();
     let tagsFingerprints = [];
     let tagsChilds = [];
@@ -70,15 +72,22 @@ export const insertText2Page = (originalText, translatedText) => {
     while (tagsLevel > 0) {
         tagsLevels[tagsLevel].forEach((tagHash) => {
             let tag = tagsFingerprints[tagHash];
-            originalTextSplitted.forEach((originalTextItem, translateIndex) => {
-                if(tag.innerHTML.includes(originalTextItem)) {
-                    if (originalTextItem !== translatedTextSplitted[translateIndex]) {
-                        tag.innerHTML = tag.innerHTML.replace(originalTextItem, originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, ""));
+            if (!tag.classList.contains('js-translator-delimiter')) {
+                originalTextSplitted.forEach((originalTextItem, translateIndex) => {
+                    console.log('innerHTML:');
+                    console.log(tag.innerHTML);
+                    console.log('originalTextItem:');
+                    console.log(originalTextItem);
+                    console.log('------------------');
+                    if (tag.innerHTML.includes(originalTextItem)) {
+                        if (originalTextItem !== translatedTextSplitted[translateIndex]) {
+                            tag.innerHTML = tag.innerHTML.replace(originalTextItem, originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, ""));
+                        }
+                        originalTextSplitted.splice(translateIndex, 1);
+                        translatedTextSplitted.splice(translateIndex, 1);
                     }
-                    originalTextSplitted.splice(translateIndex, 1);
-                    translatedTextSplitted.splice(translateIndex, 1);
-                }
-            });
+                });
+            }
         });
         tagsLevel--;
     }

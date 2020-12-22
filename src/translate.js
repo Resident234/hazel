@@ -23,7 +23,6 @@ export function enableTranslation(API_KEY, LANGUAGE) {
     let pageText = objBodyTag.innerText;
     pageText = prepareDelimitersBeforeSubmitToTranslation(pageText);
     let pageTextSplitted = pageText.split(DELIMITER_FOR_TRANSLATED_TEXT);
-    console.log(pageTextSplitted);
     const promises = pageTextSplitted.map((c) => {
         return new Promise((resolve) => {
             // make some delay because the maximum rate limit of Google API is 10 qps per IP address.
