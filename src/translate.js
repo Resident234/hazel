@@ -3,7 +3,7 @@ import {bodySelector, textTags} from "./services/tags";
 import {
     DELIMITER_FOR_TRANSLATED_TEXT,
     hideDelimitersOnDOM,
-    insertDelimitersOnDOM,
+    insertDelimitersOnDOM, prepareDelimitersAfterTranslation,
     prepareDelimitersBeforeSubmitToTranslation
 } from "./components/delimiters";
 import {prepareTranslatedText} from "./services/helpers";
@@ -36,9 +36,12 @@ export function enableTranslation(API_KEY, LANGUAGE) {
 
     return Promise.all(promises)
         .then((text) => {
-            text = prepareTranslatedText(text);
-            insertText2Page(pageTextSplitted, text);
-            hideDelimitersOnDOM();
+            if (text) {
+                text = prepareTranslatedText(text);
+                text = prepareDelimitersAfterTranslation(text);
+                insertText2Page(pageTextSplitted, text);
+            }
+            hideDelimitersOnDOM();//TODO: выполняется по несколько раз , вынести тсыда
             hideSpinner();
         }, () => {
         });
