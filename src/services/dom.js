@@ -80,7 +80,7 @@ export const insertText2Page = (originalText, translatedText) => {
             if (!tag.classList.contains('js-translator-delimiter')) {
                 originalTextSplitted.forEach((originalTextItem, translateIndex) => {
                     originalTextItem = originalTextItem.trim();
-                    if (tag.innerHTML.includes(originalTextItem)) {
+                    if (tag.innerHTML.includes(originalTextItem) && tag.innerText.includes(originalTextItem)) {
                         if (originalTextItem !== translatedTextSplitted[translateIndex]) {
                             let innerHTMLPrev = tag.innerHTML;
                             tag.innerHTML = tag.innerHTML.replace(
@@ -94,10 +94,6 @@ export const insertText2Page = (originalText, translatedText) => {
                         } else {
                             originalTextSplitted.splice(translateIndex, 1);
                             translatedTextSplitted.splice(translateIndex, 1);
-                        }
-
-                        if (originalTextItem === 'Intern, Software Engineering (Summer 2021) - Location Flexible') {
-                            console.log(tag);
                         }
                     } else if (tag.innerHTML.toLowerCase().includes(originalTextItem.toLowerCase())) {
                         /*if (originalTextItem.toLowerCase() !== translatedTextSplitted[translateIndex].toLowerCase()) {
