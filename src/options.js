@@ -1,8 +1,10 @@
 // Saves options to chrome.storage
 function save_options() {
   const language = document.getElementById('lang').value;
+  const pasting = document.getElementById('pasting').value;
   chrome.storage.sync.set({
-    lang: language
+    lang: language,
+    pasting: pasting
   }, function() {
     const status = document.getElementById('status');
     status.textContent = 'Options saved.';
@@ -14,9 +16,11 @@ function save_options() {
 // stored in chrome.storage.
 function restore_options() {
   chrome.storage.sync.get({
-    lang: 'ru'
+    lang: 'ru',
+    pasting: 'to_root'
   }, function(items) {
     document.getElementById('lang').value = items.lang;
+    document.getElementById('pasting').value = items.pasting;
   });
 }
 document.addEventListener('DOMContentLoaded', restore_options);
