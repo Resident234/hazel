@@ -1,13 +1,15 @@
 import {bodySelector, bodyTag, tags, textTags} from "./tags";
 import md5 from "crypto-js/md5";
-import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_HTML} from "../components/delimiters";
+import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT} from "../components/delimiters";
 
 export const insertText2Page = (originalText, translatedText, PASTING) => {
     let originalTextSplitted = originalText;
     let translatedTextSplitted = translatedText;
     const objTextTags = textTags();
 
-    console.log(PASTING);
+    //console.log(Object.assign({}, originalTextSplitted));
+    //console.log(Object.assign({}, translatedTextSplitted));
+
     if (PASTING === 'to_root') {
         let tagsFingerprints = [];
         let tagsChilds = [];
@@ -72,19 +74,13 @@ export const insertText2Page = (originalText, translatedText, PASTING) => {
         while (tagsLevel > 0) {
             tagsLevels[tagsLevel].forEach((tagHash) => {
                 let tag = tagsFingerprints[tagHash];
-                if (!tag.classList.contains('js-translator-delimiter')) {
-                    insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                }
+                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             });
             tagsLevel--;
         }
     } else {
         objTextTags.forEach((tag) => {
-            if (tag.innerText.length > 0) {
-                if (!tag.classList.contains('js-translator-delimiter')) {
-                    insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                }
-            }
+            insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
         });
     }
 }
@@ -100,23 +96,55 @@ export const hasIsTranslated = () => {
 }
 
 const insertTranslatedText2Tag = (tag, originalTextSplitted, translatedTextSplitted) => {
-    originalTextSplitted.forEach((originalTextItem, translateIndex) => {
-        originalTextItem = originalTextItem.trim();
-        if (tag.innerHTML.includes(originalTextItem) && tag.innerText.includes(originalTextItem) && originalTextItem.length > 0) {
-            if (originalTextItem !== translatedTextSplitted[translateIndex]) {
-                let innerHTMLPrev = tag.innerHTML;
-                tag.innerHTML = tag.innerHTML.replace(
-                    originalTextItem,
-                    originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, "")
-                );
-                if (innerHTMLPrev !== tag.innerHTML) {
-                    originalTextSplitted.splice(translateIndex, 1);
-                    translatedTextSplitted.splice(translateIndex, 1);
+    if (tag.innerText.length > 0) {
+        if (!tag.classList.contains('js-translator-delimiter')) {
+            originalTextSplitted.forEach((originalTextItem, translateIndex) => {
+                originalTextItem = originalTextItem.trim();
+                if (originalTextItem.length > 0) {
+                    /*if (tag.classList.contains('t-24')) {
+                        console.log(Object.assign({}, originalTextSplitted));
+                        if (tag.innerHTML.includes(originalTextItem) && tag.innerText.includes(originalTextItem)) {
+                            console.log(tag.innerHTML);
+                            console.log(tag.innerText);
+                            console.log(originalTextItem);
+                        }
+                    }*/
+
+                    if (tag.innerHTML.includes(originalTextItem) && tag.innerText.includes(originalTextItem) && originalTextItem.length > 0) {
+                        if (originalTextItem !== translatedTextSplitted[translateIndex]) {
+                            let innerHTMLPrev = tag.innerHTML;
+                            //TODO: добавить адекватную регулярку и обработку массива
+                            let innerTextSplittedWithDelimiters = tag.innerText.split(DELIMITER_FOR_TRANSLATED_TEXT);
+                            let innerTextSplitted = [];
+                            innerTextSplittedWithDelimiters.forEach((item) => {
+                                innerTextSplitted = [...innerTextSplitted, ...item.split(DELIMITER_TEXT)];
+                            });
+                            let innerTextSplittedFiltered = [];
+                            innerTextSplitted.forEach((item) => {
+                                item = item.replace(/\r?\n|\r/g, '').trim();
+                                if (item.length > 0) {
+                                    innerTextSplittedFiltered.push(item);
+                                }
+                            });
+
+                            /** защита от замены при которой заменяется только фрагмент предложения **/
+                            if (innerTextSplittedFiltered.includes(originalTextItem)) {
+                                tag.innerHTML = tag.innerHTML.replace(
+                                    originalTextItem,
+                                    originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, "")
+                                );
+                                if (innerHTMLPrev !== tag.innerHTML) {
+                                    originalTextSplitted.splice(translateIndex, 1);
+                                    translatedTextSplitted.splice(translateIndex, 1);
+                                }
+                            }
+                        } else {
+                            originalTextSplitted.splice(translateIndex, 1);
+                            translatedTextSplitted.splice(translateIndex, 1);
+                        }
+                    }
                 }
-            } else {
-                originalTextSplitted.splice(translateIndex, 1);
-                translatedTextSplitted.splice(translateIndex, 1);
-            }
+            });
         }
-    });
+    }
 }
