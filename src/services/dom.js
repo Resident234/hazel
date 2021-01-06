@@ -1,6 +1,8 @@
 import {bodySelector, bodyTag, tags, textTags} from "./tags";
 import md5 from "crypto-js/md5";
 import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT} from "../components/delimiters";
+import {buildTagsLevels} from "./tagsLevels";
+import {getTagByFingerprint} from "./tagsFingerprint";
 
 export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL) => {
     let originalTextSplitted = originalText;
@@ -25,13 +27,17 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
         });
     } else if (PASTING === 'fixed_level') {
         let tagsLevels = buildTagsLevels(objTextTags, tags);
-        console.log(TAG_LEVEL);
-        console.log(tagsLevels);
         if (tagsLevels[TAG_LEVEL]) {
             tagsLevels[TAG_LEVEL].forEach((tagHash) => {
                 insertTranslatedText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
             });
         }
+    } else if (PASTING === 'content_tag') {
+        objTextTags.forEach((tag) => {
+            if (tag.className.includes('content')) {
+                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
+            }
+        });
     }
 }
 
@@ -46,9 +52,6 @@ export const hasIsTranslated = () => {
 }
 
 const insertTranslatedText2Tag = (tag, originalTextSplitted, translatedTextSplitted) => {
-    //console.log(Object.assign({}, originalTextSplitted));
-    //console.log(Object.assign({}, translatedTextSplitted));
-    //console.log(tag);
     if (tag.innerText.length > 0) {
         if (!tag.classList.contains('js-translator-delimiter')) {
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
@@ -92,99 +95,4 @@ const insertTranslatedText2Tag = (tag, originalTextSplitted, translatedTextSplit
             });
         }
     }
-}
-
-const buildTagsLevels = (tags, tagsNames) => {
-    let tagsChilds = [];
-    let tagsLevels = [];
-    tagsLevels[0] = [];
-    tags.forEach((tag) => {
-        if (tag.innerText.length > 0) {
-            if (tagsNames.includes(tag.parentElement.tagName.toLowerCase())) {
-                let parentTagFingerprint = generateFingerprintForTag(tag.parentElement);
-                if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
-                    tagsChilds[md5(parentTagFingerprint).toString()] = [];
-                }
-                tagsChilds[md5(parentTagFingerprint).toString()].push(getTagFingerprint(tag));
-            } else if (bodySelector() === tag.parentElement.tagName.toLowerCase()) {
-                tagsLevels[0].push(getTagFingerprint(tag));
-            }
-        }
-    });
-    let level = 0;
-    while (1) {
-        if (tagsLevels[level]) {
-            tagsLevels[level].forEach((tagHash) => {
-                if (tagsChilds[tagHash]) {
-                    let nextLevel = level + 1;
-                    if (tagsLevels[nextLevel]) {
-                        tagsLevels[nextLevel] = [...tagsLevels[nextLevel], ...tagsChilds[tagHash]];
-                    } else {
-                        tagsLevels[nextLevel] = [...tagsChilds[tagHash]];
-                    }
-                }
-            });
-            level++;
-        } else {
-            break;
-        }
-    }
-
-    return tagsLevels;
-}
-
-const getTagByFingerprint = (tagHash) => {
-    let tagsFingerprints = getTagsFingerprints(textTags());
-    return tagsFingerprints[tagHash];
-}
-
-const getTagsFingerprints = (tags) => {
-    let tagsFingerprints = [];
-    tags.forEach((tag) => {
-        if (tag.innerText.length > 0) {
-            let fingerprint =
-                tag.className +
-                tag.getAttributeNames().join(' ') +
-                tag.id +
-                tag.localName +
-                tag.outerHTML +
-                tag.tagName +
-                tag.namespaceURI +
-                tag.nodeName +
-                tag.nodeValue +
-                tag.textContent;
-            let hash = md5(fingerprint);
-            tagsFingerprints[hash.toString()] = tag;
-        }
-    });
-    return tagsFingerprints;
-}
-
-const getTagFingerprint = (tag) => {
-    let fingerprint =
-        tag.className +
-        tag.getAttributeNames().join(' ') +
-        tag.id +
-        tag.localName +
-        tag.outerHTML +
-        tag.tagName +
-        tag.namespaceURI +
-        tag.nodeName +
-        tag.nodeValue +
-        tag.textContent;
-    let hash = md5(fingerprint);
-    return hash.toString();
-}
-
-const generateFingerprintForTag = (tag) => {
-    return  tag.className +
-            tag.getAttributeNames().join(' ') +
-            tag.id +
-            tag.localName +
-            tag.outerHTML +
-            tag.tagName +
-            tag.namespaceURI +
-            tag.nodeName +
-            tag.nodeValue +
-            tag.textContent;
 }
