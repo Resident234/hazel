@@ -1,5 +1,5 @@
 const DELIMITER_CLASS = 'js-translator-delimiter';
-export const DELIMITER_HTML = `<div class="${DELIMITER_CLASS} translator-delimiter"><-></div>`;
+export const DELIMITER_HTML = `<delimiter class="${DELIMITER_CLASS} translator-delimiter"><-></delimiter>`;
 export const DELIMITER_TEXT = '<->';
 export const DELIMITER_FOR_TRANSLATED_TEXT = '.';
 export const DELIMITER_EXCLUSION = ['Node.js'];

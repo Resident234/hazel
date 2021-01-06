@@ -16,6 +16,7 @@ export const insertText2Page = (originalText, translatedText, PASTING) => {
         let tagsLevels = [];
         tagsLevels[0] = [];
         objTextTags.forEach((tag) => {
+            console.log(tag);
             if (tag.innerText.length > 0) {
                 let fingerprint =
                     tag.className +
@@ -96,23 +97,18 @@ export const hasIsTranslated = () => {
 }
 
 const insertTranslatedText2Tag = (tag, originalTextSplitted, translatedTextSplitted) => {
+    //console.log(Object.assign({}, originalTextSplitted));
+    //console.log(Object.assign({}, translatedTextSplitted));
+    //console.log(tag);
     if (tag.innerText.length > 0) {
         if (!tag.classList.contains('js-translator-delimiter')) {
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
                 originalTextItem = originalTextItem.trim();
                 if (originalTextItem.length > 0) {
-                    /*if (tag.classList.contains('t-24')) {
-                        console.log(Object.assign({}, originalTextSplitted));
-                        if (tag.innerHTML.includes(originalTextItem) && tag.innerText.includes(originalTextItem)) {
-                            console.log(tag.innerHTML);
-                            console.log(tag.innerText);
-                            console.log(originalTextItem);
-                        }
-                    }*/
-
                     if (tag.innerHTML.includes(originalTextItem) && tag.innerText.includes(originalTextItem) && originalTextItem.length > 0) {
                         if (originalTextItem !== translatedTextSplitted[translateIndex]) {
                             let innerHTMLPrev = tag.innerHTML;
+
                             //TODO: добавить адекватную регулярку и обработку массива
                             let innerTextSplittedWithDelimiters = tag.innerText.split(DELIMITER_FOR_TRANSLATED_TEXT);
                             let innerTextSplitted = [];

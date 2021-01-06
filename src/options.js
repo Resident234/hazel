@@ -2,9 +2,11 @@
 function save_options() {
   const language = document.getElementById('lang').value;
   const pasting = document.getElementById('pasting').value;
+  const tagLevel = document.getElementById('tag_level').value;
   chrome.storage.sync.set({
     lang: language,
-    pasting: pasting
+    pasting: pasting,
+    tagLevel: tagLevel
   }, function() {
     const status = document.getElementById('status');
     status.textContent = 'Options saved.';
@@ -17,12 +19,32 @@ function save_options() {
 function restore_options() {
   chrome.storage.sync.get({
     lang: 'ru',
-    pasting: 'to_root'
+    pasting: 'to_root',
+    tagLevel: '1',
   }, function(items) {
     document.getElementById('lang').value = items.lang;
     document.getElementById('pasting').value = items.pasting;
+    document.getElementById('tag_level').value = items.tagLevel;
+
+    const tagLevelRow = document.getElementById('tag_level').parentElement.parentElement;//tr
+    if (items.pasting === 'fixed_level') {
+      tagLevelRow.style.display = 'table-row';
+    } else {
+      tagLevelRow.style.display = 'none';
+    }
   });
 }
+
+function selector_toggle(event) {
+  const tagLevelRow = document.getElementById('tag_level').parentElement.parentElement;//tr
+  if (event.target.value === 'fixed_level') {
+    tagLevelRow.style.display = 'table-row';
+  } else {
+    tagLevelRow.style.display = 'none';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
+document.getElementById('pasting').addEventListener('change', selector_toggle);
 
