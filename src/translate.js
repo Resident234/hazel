@@ -10,7 +10,7 @@ import {prepareTranslatedText} from "./services/helpers";
 import {translate} from "./services/translate";
 import {insertText2Page} from "./services/dom";
 
-export function enableTranslation(API_KEY, LANGUAGE, PASTING) {
+export function enableTranslation(API_KEY, LANGUAGE, PASTING, TAG_LEVEL) {
     showSpinner();
     const objTextTags = textTags();
     if (!objTextTags.length) {
@@ -39,7 +39,7 @@ export function enableTranslation(API_KEY, LANGUAGE, PASTING) {
             if (text) {
                 text = prepareTranslatedText(text);
                 text = prepareDelimitersAfterTranslation(text);
-                insertText2Page(pageTextSplitted, text, PASTING);
+                insertText2Page(pageTextSplitted, text, PASTING, TAG_LEVEL);
             }
             hideDelimitersOnDOM();//TODO: выполняется по несколько раз , вынести отсюда
             hideSpinner();

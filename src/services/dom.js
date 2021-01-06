@@ -2,7 +2,7 @@ import {bodySelector, bodyTag, tags, textTags} from "./tags";
 import md5 from "crypto-js/md5";
 import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT} from "../components/delimiters";
 
-export const insertText2Page = (originalText, translatedText, PASTING) => {
+export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL) => {
     let originalTextSplitted = originalText;
     let translatedTextSplitted = translatedText;
     const objTextTags = textTags();
@@ -11,78 +11,27 @@ export const insertText2Page = (originalText, translatedText, PASTING) => {
     //console.log(Object.assign({}, translatedTextSplitted));
 
     if (PASTING === 'to_root') {
-        let tagsFingerprints = [];
-        let tagsChilds = [];
-        let tagsLevels = [];
-        tagsLevels[0] = [];
-        objTextTags.forEach((tag) => {
-            console.log(tag);
-            if (tag.innerText.length > 0) {
-                let fingerprint =
-                    tag.className +
-                    tag.getAttributeNames().join(' ') +
-                    tag.id +
-                    tag.localName +
-                    tag.outerHTML +
-                    tag.tagName +
-                    tag.namespaceURI +
-                    tag.nodeName +
-                    tag.nodeValue +
-                    tag.textContent;
-                let hash = md5(fingerprint);
-                tagsFingerprints[hash.toString()] = tag;
-
-                if (tags.includes(tag.parentElement.tagName.toLowerCase())) {
-                    let parentTagFingerprint =
-                        tag.parentElement.className +
-                        tag.parentElement.getAttributeNames().join(' ') +
-                        tag.parentElement.id +
-                        tag.parentElement.localName +
-                        tag.parentElement.outerHTML +
-                        tag.parentElement.tagName +
-                        tag.parentElement.namespaceURI +
-                        tag.parentElement.nodeName +
-                        tag.parentElement.nodeValue +
-                        tag.parentElement.textContent;
-                    if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
-                        tagsChilds[md5(parentTagFingerprint).toString()] = [];
-                    }
-                    tagsChilds[md5(parentTagFingerprint).toString()].push(hash.toString());
-                } else if (bodySelector() === tag.parentElement.tagName.toLowerCase()) {
-                    tagsLevels[0].push(hash.toString());
-                }
-            }
-        });
-        let level = 0;
-        while (1) {
-            if (tagsLevels[level]) {
-                tagsLevels[level].forEach((tagHash) => {
-                    if (tagsChilds[tagHash]) {
-                        let nextLevel = level + 1;
-                        if (tagsLevels[nextLevel]) {
-                            tagsLevels[nextLevel] = [...tagsLevels[nextLevel], ...tagsChilds[tagHash]];
-                        } else {
-                            tagsLevels[nextLevel] = [...tagsChilds[tagHash]];
-                        }
-                    }
-                });
-                level++;
-            } else {
-                break;
-            }
-        }
+        let tagsLevels = buildTagsLevels(objTextTags);
         let tagsLevel = tagsLevels.length - 1;
         while (tagsLevel > 0) {
             tagsLevels[tagsLevel].forEach((tagHash) => {
-                let tag = tagsFingerprints[tagHash];
-                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
+                insertTranslatedText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
             });
             tagsLevel--;
         }
-    } else {
+    } else if (PASTING === 'linear') {
         objTextTags.forEach((tag) => {
             insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
         });
+    } else if (PASTING === 'fixed_level') {
+        let tagsLevels = buildTagsLevels(objTextTags, tags);
+        console.log(TAG_LEVEL);
+        console.log(tagsLevels);
+        if (tagsLevels[TAG_LEVEL]) {
+            tagsLevels[TAG_LEVEL].forEach((tagHash) => {
+                insertTranslatedText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
+            });
+        }
     }
 }
 
@@ -143,4 +92,99 @@ const insertTranslatedText2Tag = (tag, originalTextSplitted, translatedTextSplit
             });
         }
     }
+}
+
+const buildTagsLevels = (tags, tagsNames) => {
+    let tagsChilds = [];
+    let tagsLevels = [];
+    tagsLevels[0] = [];
+    tags.forEach((tag) => {
+        if (tag.innerText.length > 0) {
+            if (tagsNames.includes(tag.parentElement.tagName.toLowerCase())) {
+                let parentTagFingerprint = generateFingerprintForTag(tag.parentElement);
+                if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
+                    tagsChilds[md5(parentTagFingerprint).toString()] = [];
+                }
+                tagsChilds[md5(parentTagFingerprint).toString()].push(getTagFingerprint(tag));
+            } else if (bodySelector() === tag.parentElement.tagName.toLowerCase()) {
+                tagsLevels[0].push(getTagFingerprint(tag));
+            }
+        }
+    });
+    let level = 0;
+    while (1) {
+        if (tagsLevels[level]) {
+            tagsLevels[level].forEach((tagHash) => {
+                if (tagsChilds[tagHash]) {
+                    let nextLevel = level + 1;
+                    if (tagsLevels[nextLevel]) {
+                        tagsLevels[nextLevel] = [...tagsLevels[nextLevel], ...tagsChilds[tagHash]];
+                    } else {
+                        tagsLevels[nextLevel] = [...tagsChilds[tagHash]];
+                    }
+                }
+            });
+            level++;
+        } else {
+            break;
+        }
+    }
+
+    return tagsLevels;
+}
+
+const getTagByFingerprint = (tagHash) => {
+    let tagsFingerprints = getTagsFingerprints(textTags());
+    return tagsFingerprints[tagHash];
+}
+
+const getTagsFingerprints = (tags) => {
+    let tagsFingerprints = [];
+    tags.forEach((tag) => {
+        if (tag.innerText.length > 0) {
+            let fingerprint =
+                tag.className +
+                tag.getAttributeNames().join(' ') +
+                tag.id +
+                tag.localName +
+                tag.outerHTML +
+                tag.tagName +
+                tag.namespaceURI +
+                tag.nodeName +
+                tag.nodeValue +
+                tag.textContent;
+            let hash = md5(fingerprint);
+            tagsFingerprints[hash.toString()] = tag;
+        }
+    });
+    return tagsFingerprints;
+}
+
+const getTagFingerprint = (tag) => {
+    let fingerprint =
+        tag.className +
+        tag.getAttributeNames().join(' ') +
+        tag.id +
+        tag.localName +
+        tag.outerHTML +
+        tag.tagName +
+        tag.namespaceURI +
+        tag.nodeName +
+        tag.nodeValue +
+        tag.textContent;
+    let hash = md5(fingerprint);
+    return hash.toString();
+}
+
+const generateFingerprintForTag = (tag) => {
+    return  tag.className +
+            tag.getAttributeNames().join(' ') +
+            tag.id +
+            tag.localName +
+            tag.outerHTML +
+            tag.tagName +
+            tag.namespaceURI +
+            tag.nodeName +
+            tag.nodeValue +
+            tag.textContent;
 }

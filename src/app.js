@@ -4,6 +4,7 @@ import {hasIsTranslated, setIsTranslated} from "./services/dom";
 
 let LANGUAGE = '';
 let PASTING = '';
+let TAG_LEVEL = '';
 
 /**
  * 1) Тип неделимой еденицы - предложение / текст внутри тега / текст вместе с тегом
@@ -25,10 +26,12 @@ let TERM_DELIMITER = 'dot'; //dot | start_or_end_tag | both
 
 chrome.storage.sync.get({
   lang: 'ru',
-  pasting: 'to_root'
+  pasting: 'to_root',
+  tagLevel: 1
 }, function(items) {
   LANGUAGE = items.lang;
   PASTING = items.pasting;
+  TAG_LEVEL = items.tagLevel;
   if (!API_KEY) {
     console.error('There is no API key in options for translation.');
   }
@@ -40,7 +43,7 @@ const portHasTranslated = chrome.extension.connect({
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
   if (msg.action === 'rerun' && !hasIsTranslated()) {
     setIsTranslated();//TODO: translate is running
-    Promise.all([enableTranslation(API_KEY, LANGUAGE, PASTING)]).then(() => {
+    Promise.all([enableTranslation(API_KEY, LANGUAGE, PASTING, TAG_LEVEL)]).then(() => {
       setIsTranslated();
     });
   }
