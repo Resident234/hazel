@@ -14,6 +14,24 @@ export function prepareDelimitersBeforeSubmitToTranslation(html) {
         .replace(/\.+/g, DELIMITER_FOR_TRANSLATED_TEXT);
 }
 
+export function prepareDelimiters(text) {
+    text = text
+        .replace(/\r?\n|\r/g, '')
+        .replaceAll(DELIMITER_TEXT, DELIMITER_FOR_TRANSLATED_TEXT)
+        .replace(/\.+/g, DELIMITER_FOR_TRANSLATED_TEXT);
+    let textItems = text.split('.');
+    let textFiltered = [];
+    textItems.forEach((textItem) => {
+        textItem = textItem.trim();
+        if (textItem.length > 0) {
+            textFiltered.push(textItem);
+        }
+    });
+    text = textFiltered.join('.');
+    text = text.trim();
+    return text;
+}
+
 export function prepareDelimitersAfterTranslation(text) {
     //DELIMITER_EXCLUSION.forEach(function(item) { text.replaceAll(item.replaceAll(DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_FOR_EXCLUSION), item); });
     return text;

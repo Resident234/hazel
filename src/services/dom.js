@@ -1,8 +1,12 @@
 import {bodySelector, bodyTag, tags, textTags} from "./tags";
 import md5 from "crypto-js/md5";
-import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT} from "../components/delimiters";
+import {
+    DELIMITER_FOR_TRANSLATED_TEXT,
+    DELIMITER_TEXT, prepareDelimiters,
+    prepareDelimitersBeforeSubmitToTranslation
+} from "../components/delimiters";
 import {buildTagsLevels} from "./tagsLevels";
-import {getTagByFingerprint} from "./tagsFingerprint";
+import {generateFingerprintForTag, getTagByFingerprint, getTagFingerprint} from "./tagsFingerprint";
 
 export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL) => {
     let originalTextSplitted = originalText;
@@ -38,6 +42,49 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                 insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             }
         });
+    } else if (PASTING === 'traversing_tree') {
+        let tagsChilds = [];
+        objTextTags.forEach((tag) => {
+            if (tag.innerText.length > 0) {
+                if (tags.includes(tag.parentElement.tagName.toLowerCase())) {
+                    let parentTagFingerprint = generateFingerprintForTag(tag.parentElement);
+                    if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
+                        tagsChilds[md5(parentTagFingerprint).toString()] = [];
+                    }
+                    tagsChilds[md5(parentTagFingerprint).toString()].push(getTagFingerprint(tag));
+                }
+            }
+        });
+        let tagsLevels = buildTagsLevels(objTextTags, tags);
+
+        let objBodyTag = document.querySelector(bodySelector());
+        let pageText = objBodyTag.innerText;
+        pageText = prepareDelimitersBeforeSubmitToTranslation(pageText);
+        let pageTextSplitted = pageText.split(DELIMITER_FOR_TRANSLATED_TEXT);
+        let pageTextSplittedFiltered = [];
+        pageTextSplitted.forEach((pageTextItem) => {
+            pageTextSplittedFiltered.push(prepareDelimiters(pageTextItem));
+        });
+        console.log(pageTextSplittedFiltered);
+        let textChilds = [];
+        Object.entries(tagsChilds).forEach(entry => {
+            const [tagKeyHash, tagValuesHashes] = entry;
+            let tagKey = getTagByFingerprint(tagKeyHash);
+            if (tagKey) {
+                tagValuesHashes.forEach((tagValueHash) => {
+                    let tagValue = getTagByFingerprint(tagValueHash);
+                    if (tagValue) {
+                        let tagValueText = prepareDelimiters(tagValue.innerText);
+                        let tagKeyText = prepareDelimiters(tagKey.innerText);
+                        if (!textChilds[tagKeyText]) {
+                            textChilds[tagKeyText] = [];
+                        }
+                        textChilds[tagKeyText].push(tagValueText);
+                    }
+                });
+            }
+        });
+        console.log(textChilds);
     }
 }
 
