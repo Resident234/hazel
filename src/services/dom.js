@@ -63,7 +63,10 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
         let pageTextSplitted = pageText.split(DELIMITER_FOR_TRANSLATED_TEXT);
         let pageTextSplittedFiltered = [];
         pageTextSplitted.forEach((pageTextItem) => {
-            pageTextSplittedFiltered.push(prepareDelimiters(pageTextItem));
+            pageTextItem = prepareDelimiters(pageTextItem);
+            if (pageTextItem.length) {
+                pageTextSplittedFiltered.push(pageTextItem);
+            }
         });
         console.log(pageTextSplittedFiltered);
         let textChilds = [];
