@@ -7,7 +7,7 @@ export const buildTagsLevels = (tags, tagsNames) => {
     let tagsLevels = [];
     tagsLevels[0] = [];
     tags.forEach((tag) => {
-        if (tag.innerText.length > 0) {
+        if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
             if (tagsNames.includes(tag.parentElement.tagName.toLowerCase())) {
                 let parentTagFingerprint = generateFingerprintForTag(tag.parentElement);
                 if (!tagsChilds[md5(parentTagFingerprint).toString()]) {

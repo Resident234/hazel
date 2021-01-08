@@ -44,8 +44,10 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
         });
     } else if (PASTING === 'traversing_tree') {
         let tagsChilds = [];
+        let tagsHashTextMap = [];
         objTextTags.forEach((tag) => {
-            if (tag.innerText.length > 0) {
+            if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
+                tagsHashTextMap[getTagFingerprint(tag)] = tag.innerText;
                 if (tags.includes(tag.parentElement.tagName.toLowerCase())) {
                     let parentTagFingerprint = generateFingerprintForTag(tag.parentElement);
                     if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
@@ -56,38 +58,51 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
             }
         });
         let tagsLevels = buildTagsLevels(objTextTags, tags);
-
-        let objBodyTag = document.querySelector(bodySelector());
-        let pageText = objBodyTag.innerText;
-        pageText = prepareDelimitersBeforeSubmitToTranslation(pageText);
-        let pageTextSplitted = pageText.split(DELIMITER_FOR_TRANSLATED_TEXT);
-        let pageTextSplittedFiltered = [];
-        pageTextSplitted.forEach((pageTextItem) => {
-            pageTextItem = prepareDelimiters(pageTextItem);
-            if (pageTextItem.length) {
-                pageTextSplittedFiltered.push(pageTextItem);
-            }
+        let tagsToTranslate = [];
+        let tagsToTranslateInit = [];
+        tagsLevels[0].forEach((tagHash) => {
+            tagsToTranslateInit.push(tagHash);
         });
-        console.log(pageTextSplittedFiltered);
-        let textChilds = [];
-        Object.entries(tagsChilds).forEach(entry => {
-            const [tagKeyHash, tagValuesHashes] = entry;
-            let tagKey = getTagByFingerprint(tagKeyHash);
-            if (tagKey) {
-                tagValuesHashes.forEach((tagValueHash) => {
-                    let tagValue = getTagByFingerprint(tagValueHash);
-                    if (tagValue) {
-                        let tagValueText = prepareDelimiters(tagValue.innerText);
-                        let tagKeyText = prepareDelimiters(tagKey.innerText);
-                        if (!textChilds[tagKeyText]) {
-                            textChilds[tagKeyText] = [];
-                        }
-                        textChilds[tagKeyText].push(tagValueText);
+        let stepToNextLevel = true;
+        let tagsToTranslateInitNextLevel = [];
+        while (stepToNextLevel) {
+            stepToNextLevel = false;
+            tagsToTranslateInit.forEach((tagHash) => {
+                let tag = getTagByFingerprint(tagHash);
+                let tagText = tag.innerText;
+                tagText = prepareDelimiters(tagText);
+                //console.log(tagText);
+                if (tagsChilds[tagHash]) {
+                    let arTagAllChildsText = [];
+                    tagsChilds[tagHash].forEach((tagChildHash) => {
+                        let tagChild = getTagByFingerprint(tagChildHash);
+                        let tagChildText = tagChild.innerText;
+                        tagChildText = prepareDelimiters(tagChildText);
+                        //console.log(tagChildText);
+                        arTagAllChildsText.push(tagChildText);
+                    });
+                    let strTagAllChildsText = arTagAllChildsText.join('.');
+                    if (tagText.length === strTagAllChildsText.length) {
+                        tagsToTranslateInitNextLevel.push(tagHash);
+                        stepToNextLevel = true;
+                    } else {
+                        tagsToTranslate.push(tagHash);
                     }
-                });
+                } else {
+                    tagsToTranslate.push(tagHash);
+                }
+                console.log('------');
+            });
+            if (tagsToTranslateInit.length === tagsToTranslateInitNextLevel.length && tagsToTranslateInit.every((value, index) => value === tagsToTranslateInitNextLevel[index])) {
+                break;
             }
+            tagsToTranslateInit = tagsToTranslateInitNextLevel;
+            tagsToTranslateInitNextLevel = [];
+        }
+        tagsToTranslate.forEach((tagHash) => {
+            console.log(getTagByFingerprint(tagHash));
         });
-        console.log(textChilds);
+
     }
 }
 
