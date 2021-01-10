@@ -1,4 +1,28 @@
-export const tags = ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'strong', 'li', 'td', 'div', 'a', 'option', 'em', 'header', 'section'];
+export const tags = [
+    'p',
+    'blockquote',
+    'pre',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'span',
+    'strong',
+    'li',
+    'td',
+    'div',
+    'a',
+    'option',
+    'em',
+    'header',
+    'section',
+    'ul',
+    'nav',
+    'aside',
+    'select',
+];
 export const tagSelector = () => {
     return tags.map((t) => {
         return '' + t;

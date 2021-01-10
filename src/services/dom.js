@@ -71,19 +71,19 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                 let tag = getTagByFingerprint(tagHash);
                 let tagText = tag.innerText;
                 tagText = prepareDelimiters(tagText);
-                //console.log(tagText);
                 if (tagsChilds[tagHash]) {
                     let arTagAllChildsText = [];
+                    let tagChildHashes = [];
                     tagsChilds[tagHash].forEach((tagChildHash) => {
                         let tagChild = getTagByFingerprint(tagChildHash);
                         let tagChildText = tagChild.innerText;
                         tagChildText = prepareDelimiters(tagChildText);
-                        //console.log(tagChildText);
                         arTagAllChildsText.push(tagChildText);
+                        tagChildHashes.push(tagChildHash);
                     });
                     let strTagAllChildsText = arTagAllChildsText.join('.');
                     if (tagText.length === strTagAllChildsText.length) {
-                        tagsToTranslateInitNextLevel.push(tagHash);
+                        tagsToTranslateInitNextLevel = [...tagsToTranslateInitNextLevel, ...tagChildHashes];
                         stepToNextLevel = true;
                     } else {
                         tagsToTranslate.push(tagHash);
@@ -91,16 +91,14 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                 } else {
                     tagsToTranslate.push(tagHash);
                 }
-                console.log('------');
             });
-            if (tagsToTranslateInit.length === tagsToTranslateInitNextLevel.length && tagsToTranslateInit.every((value, index) => value === tagsToTranslateInitNextLevel[index])) {
-                break;
-            }
             tagsToTranslateInit = tagsToTranslateInitNextLevel;
             tagsToTranslateInitNextLevel = [];
         }
         tagsToTranslate.forEach((tagHash) => {
-            console.log(getTagByFingerprint(tagHash));
+            let tag = (getTagByFingerprint(tagHash));
+            console.log(tag);
+            insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
         });
 
     }
