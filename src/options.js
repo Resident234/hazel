@@ -3,10 +3,12 @@ function save_options() {
   const language = document.getElementById('lang').value;
   const pasting = document.getElementById('pasting').value;
   const tagLevel = document.getElementById('tag_level').value;
+  const initiationMethod = document.getElementById('initiation_method').value;
   chrome.storage.sync.set({
     lang: language,
     pasting: pasting,
-    tagLevel: tagLevel
+    tagLevel: tagLevel,
+    initiationMethod: initiationMethod,
   }, function() {
     const status = document.getElementById('status');
     status.textContent = 'Options saved.';
@@ -21,10 +23,12 @@ function restore_options() {
     lang: 'ru',
     pasting: 'to_root',
     tagLevel: '1',
+    initiationMethod: 'page_onload',
   }, function(items) {
     document.getElementById('lang').value = items.lang;
     document.getElementById('pasting').value = items.pasting;
     document.getElementById('tag_level').value = items.tagLevel;
+    document.getElementById('initiation_method').value = items.initiationMethod;
 
     const tagLevelRow = document.getElementById('tag_level').parentElement.parentElement;//tr
     if (items.pasting === 'fixed_level') {

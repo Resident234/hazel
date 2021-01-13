@@ -27,11 +27,13 @@ let TERM_DELIMITER = 'dot'; //dot | start_or_end_tag | both
 chrome.storage.sync.get({
   lang: 'ru',
   pasting: 'to_root',
+  initiationMethod: 'page_onload',
   tagLevel: 1
 }, function(items) {
   LANGUAGE = items.lang;
   PASTING = items.pasting;
   TAG_LEVEL = items.tagLevel;
+  INITIATION_METHOD = items.initiationMethod;
   if (!API_KEY) {
     console.error('There is no API key in options for translation.');
   }
@@ -43,7 +45,7 @@ const portHasTranslated = chrome.extension.connect({
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
   if (msg.action === 'rerun' && !hasIsTranslated()) {
     setIsTranslated();//TODO: translate is running
-    Promise.all([enableTranslation(API_KEY, LANGUAGE, PASTING, TAG_LEVEL)]).then(() => {
+    Promise.all([enableTranslation(API_KEY, LANGUAGE, PASTING, TAG_LEVEL, INITIATION_METHOD)]).then(() => {
       setIsTranslated();
     });
   }

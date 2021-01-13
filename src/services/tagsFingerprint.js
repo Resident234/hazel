@@ -9,7 +9,7 @@ export const getTagByFingerprint = (tagHash) => {
 export const getTagsFingerprints = (tags) => {
     let tagsFingerprints = [];
     tags.forEach((tag) => {
-        if (tag.innerText.length > 0) {
+        //if (tag.innerText.length > 0) {
             let fingerprint =
                 tag.className +
                 tag.getAttributeNames().join(' ') +
@@ -23,7 +23,7 @@ export const getTagsFingerprints = (tags) => {
                 tag.textContent;
             let hash = md5(fingerprint);
             tagsFingerprints[hash.toString()] = tag;
-        }
+        //}
     });
     return tagsFingerprints;
 }
