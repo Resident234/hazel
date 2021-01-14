@@ -45,3 +45,8 @@
 hover {
     cursor: pointer;
 }
+
+hover-popup {
+    position: absolute;
+    left: 0;
+}
