@@ -7,6 +7,7 @@ import {
 } from "../components/delimiters";
 import {buildTagsLevels} from "./tagsLevels";
 import {generateFingerprintForTag, getTagByFingerprint, getTagFingerprint} from "./tagsFingerprint";
+import {initHover} from "../components/hover";
 
 export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL, INITIATION_METHOD) => {
     let originalTextSplitted = originalText;
@@ -32,19 +33,31 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
         }
     } else if (PASTING === 'linear') {
         objTextTags.forEach((tag) => {
-            insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
+            if (INITIATION_METHOD === 'page_onload') {
+                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
+            } else if (INITIATION_METHOD === 'on_hover') {
+                setHoverText2Tag(tag, originalTextSplitted);
+            }
         });
     } else if (PASTING === 'fixed_level') {
         let tagsLevels = buildTagsLevels(objTextTags, tags);
         if (tagsLevels[TAG_LEVEL]) {
             tagsLevels[TAG_LEVEL].forEach((tagHash) => {
-                insertTranslatedText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
+                if (INITIATION_METHOD === 'page_onload') {
+                    insertTranslatedText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
+                } else if (INITIATION_METHOD === 'on_hover') {
+                    setHoverText2Tag(getTagByFingerprint(tagHash), originalTextSplitted);
+                }
             });
         }
     } else if (PASTING === 'content_tag') {
         objTextTags.forEach((tag) => {
             if (tag.className.includes('content')) {
-                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
+                if (INITIATION_METHOD === 'page_onload') {
+                    insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
+                } else if (INITIATION_METHOD === 'on_hover') {
+                    setHoverText2Tag(tag, originalTextSplitted);
+                }
             }
         });
     } else if (PASTING === 'traversing_tree') {
@@ -102,10 +115,16 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
         }
         tagsToTranslate.forEach((tagHash) => {
             let tag = (getTagByFingerprint(tagHash));
-            console.log(tag);
-            insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
+            if (INITIATION_METHOD === 'page_onload') {
+                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
+            } else if (INITIATION_METHOD === 'on_hover') {
+                setHoverText2Tag(tag, originalTextSplitted);
+            }
         });
 
+    }
+    if (INITIATION_METHOD === 'on_hover') {
+        initHover();
     }
 }
 

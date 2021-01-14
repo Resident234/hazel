@@ -41,3 +41,7 @@
     display: none!important;
 }
 
+/** hover **/
+hover {
+    cursor: pointer;
+}
