@@ -14,7 +14,7 @@ export function initHover() {
                     let hoverPopup = document.createElement('hover-popup');
                     let compStyles = window.getComputedStyle(event.target);
                     let compStylesBody = window.getComputedStyle(bodyTag());
-                    hoverPopup.innerText = event.target.innerText;
+                    hoverPopup.innerText = event.target.dataset.translatedText;
                     hoverPopup.style.width = '1200px';//TODO: вычислить ширину пока не получилось
                     hoverPopup.style.height = compStyles.lineHeight;
                     hoverPopup.style.top = '-' + compStyles.lineHeight;

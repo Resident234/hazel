@@ -26,7 +26,7 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                 if (INITIATION_METHOD === 'page_onload') {
                     insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
                 } else if (INITIATION_METHOD === 'on_hover') {
-                    setHoverText2Tag(tag, originalTextSplitted);
+                    setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
                 }
             });
             tagsLevel--;
@@ -36,7 +36,7 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
             if (INITIATION_METHOD === 'page_onload') {
                 insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             } else if (INITIATION_METHOD === 'on_hover') {
-                setHoverText2Tag(tag, originalTextSplitted);
+                setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             }
         });
     } else if (PASTING === 'fixed_level') {
@@ -46,7 +46,7 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                 if (INITIATION_METHOD === 'page_onload') {
                     insertTranslatedText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
                 } else if (INITIATION_METHOD === 'on_hover') {
-                    setHoverText2Tag(getTagByFingerprint(tagHash), originalTextSplitted);
+                    setHoverText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
                 }
             });
         }
@@ -56,7 +56,7 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                 if (INITIATION_METHOD === 'page_onload') {
                     insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
                 } else if (INITIATION_METHOD === 'on_hover') {
-                    setHoverText2Tag(tag, originalTextSplitted);
+                    setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
                 }
             }
         });
@@ -118,7 +118,7 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
             if (INITIATION_METHOD === 'page_onload') {
                 insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             } else if (INITIATION_METHOD === 'on_hover') {
-                setHoverText2Tag(tag, originalTextSplitted);
+                setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             }
         });
 
@@ -184,40 +184,45 @@ const insertTranslatedText2Tag = (tag, originalTextSplitted, translatedTextSplit
     }
 }
 
-const setHoverText2Tag = (tag, originalTextSplitted) => {
+const setHoverText2Tag = (tag, originalTextSplitted, translatedTextSplitted) => {
     if (tag && tag.innerText.length > 0) {
         if (!tag.classList.contains('js-translator-delimiter')) {
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
                 originalTextItem = originalTextItem.trim();
                 if (originalTextItem.length > 0) {
                     if (tag.innerHTML.includes(originalTextItem) && tag.innerText.includes(originalTextItem) && originalTextItem.length > 0) {
-                        let innerHTMLPrev = tag.innerHTML;
+                        if (originalTextItem !== translatedTextSplitted[translateIndex]) {
+                            let innerHTMLPrev = tag.innerHTML;
 
-                        //TODO: добавить адекватную регулярку и обработку массива
-                        let innerTextSplittedWithDelimiters = tag.innerText.split(DELIMITER_FOR_TRANSLATED_TEXT);
-                        let innerTextSplitted = [];
-                        innerTextSplittedWithDelimiters.forEach((item) => {
-                            innerTextSplitted = [...innerTextSplitted, ...item.split(DELIMITER_TEXT)];
-                        });
-                        let innerTextSplittedFiltered = [];
-                        innerTextSplitted.forEach((item) => {
-                            item = item.replace(/\r?\n|\r/g, '').trim();
-                            if (item.length > 0) {
-                                innerTextSplittedFiltered.push(item);
-                            }
-                        });
+                            //TODO: добавить адекватную регулярку и обработку массива
+                            let innerTextSplittedWithDelimiters = tag.innerText.split(DELIMITER_FOR_TRANSLATED_TEXT);
+                            let innerTextSplitted = [];
+                            innerTextSplittedWithDelimiters.forEach((item) => {
+                                innerTextSplitted = [...innerTextSplitted, ...item.split(DELIMITER_TEXT)];
+                            });
+                            let innerTextSplittedFiltered = [];
+                            innerTextSplitted.forEach((item) => {
+                                item = item.replace(/\r?\n|\r/g, '').trim();
+                                if (item.length > 0) {
+                                    innerTextSplittedFiltered.push(item);
+                                }
+                            });
 
-                        /** защита от замены при которой заменяется только фрагмент предложения **/
-                        if (innerTextSplittedFiltered.includes(originalTextItem)) {
-                            tag.innerHTML = tag.innerHTML.replace(
-                                originalTextItem,
-                                '<hover>' + originalTextItem + '</hover>'
-                            );
-                            if (innerHTMLPrev !== tag.innerHTML) {
-                                originalTextSplitted.splice(translateIndex, 1);
+                            /** защита от замены при которой заменяется только фрагмент предложения **/
+                            if (innerTextSplittedFiltered.includes(originalTextItem)) {
+                                tag.innerHTML = tag.innerHTML.replace(
+                                    originalTextItem,
+                                    '<hover data-translated-text="' + translatedTextSplitted[translateIndex].replace(/\.$/, "") + '">' + originalTextItem + '</hover>'
+                                );
+                                if (innerHTMLPrev !== tag.innerHTML) {
+                                    originalTextSplitted.splice(translateIndex, 1);
+                                    translatedTextSplitted.splice(translateIndex, 1);
+                                }
                             }
+                        } else {
+                            originalTextSplitted.splice(translateIndex, 1);
+                            translatedTextSplitted.splice(translateIndex, 1);
                         }
-
                     }
                 }
             });
