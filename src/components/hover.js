@@ -1,3 +1,5 @@
+import {bodyTag} from "../services/tags";
+
 export function initHover() {
     const elements = document.getElementsByTagName("hover");
     for (let element of elements) {
@@ -11,12 +13,17 @@ export function initHover() {
 
                     let hoverPopup = document.createElement('hover-popup');
                     let compStyles = window.getComputedStyle(event.target);
+                    let compStylesBody = window.getComputedStyle(bodyTag());
                     hoverPopup.innerText = event.target.innerText;
-                    hoverPopup.style.width = '1000px';//TODO: вычислить ширину пока не получилось
+                    hoverPopup.style.width = '1200px';//TODO: вычислить ширину пока не получилось
                     hoverPopup.style.height = compStyles.lineHeight;
                     hoverPopup.style.top = '-' + compStyles.lineHeight;
                     hoverPopup.style.position = 'absolute';
-                    hoverPopup.style.backgroundColor = compStyles.backgroundColor;
+                    if (compStyles.backgroundColor === 'rgba(0, 0, 0, 0)') {
+                        hoverPopup.style.backgroundColor = compStylesBody.backgroundColor;
+                    } else {
+                        hoverPopup.style.backgroundColor = compStyles.backgroundColor;
+                    }
 
                     event.target.insertAdjacentHTML(
                         'afterbegin',
