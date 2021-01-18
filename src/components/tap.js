@@ -26,11 +26,7 @@ export function initTap() {
                     hoverPopup.style.height = compStyles.lineHeight;
                     hoverPopup.style.top = '-' + compStyles.lineHeight;
                     hoverPopup.style.position = 'absolute';
-                    if (compStyles.backgroundColor === 'rgba(0, 0, 0, 0)') {
-                        hoverPopup.style.backgroundColor = compStylesBody.backgroundColor;
-                    } else {
-                        hoverPopup.style.backgroundColor = compStyles.backgroundColor;
-                    }
+                    hoverPopup.style.backgroundColor = compStylesBody.backgroundColor;
 
                     event.target.insertAdjacentHTML(
                         'afterbegin',
@@ -42,12 +38,12 @@ export function initTap() {
         };
         element.onmouseover = function (event) {
             if (event.target.tagName.toLowerCase() === 'tap') {
-                event.target.border = "1px solid black";//TODO: параметры выделения бордюра доработать
+                event.target.style.backgroundColor = 'yellow';//TODO: цвет подбирать под цветовую схему сайта
             }
         };
         element.onmouseout = function (event) {
             if (event.target.tagName.toLowerCase() === 'tap') {
-                event.target.borderWidth = "0px";
+                event.target.style.backgroundColor = 'transparent';
             }
         };
     }

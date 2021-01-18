@@ -8,6 +8,7 @@ import {
 import {buildTagsLevels} from "./tagsLevels";
 import {generateFingerprintForTag, getTagByFingerprint, getTagFingerprint} from "./tagsFingerprint";
 import {initHover} from "../components/hover";
+import {initTap} from "../components/tap";
 
 export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL, INITIATION_METHOD) => {
     let originalTextSplitted = originalText;
