@@ -9,6 +9,7 @@ import {buildTagsLevels} from "./tagsLevels";
 import {generateFingerprintForTag, getTagByFingerprint, getTagFingerprint} from "./tagsFingerprint";
 import {initHover} from "../components/hover";
 import {initTap} from "../components/tap";
+import {Factory} from "./pasting/factory";
 
 export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL, INITIATION_METHOD) => {
     let originalTextSplitted = originalText;
@@ -18,8 +19,11 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
     //console.log(Object.assign({}, originalTextSplitted));
     //console.log(Object.assign({}, translatedTextSplitted));
 
+    let strategy = Factory.getStrategy(PASTING);
+    strategy.execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags);
+
     if (PASTING === 'to_root') {
-        let tagsLevels = buildTagsLevels(objTextTags, tags);
+        /*let tagsLevels = buildTagsLevels(objTextTags, tags);
         let tagsLevel = tagsLevels.length - 1;
         while (tagsLevel > 0) {
             tagsLevels[tagsLevel].forEach((tagHash) => {
@@ -33,9 +37,9 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                 }
             });
             tagsLevel--;
-        }
+        }*/
     } else if (PASTING === 'linear') {
-        objTextTags.forEach((tag) => {
+        /*objTextTags.forEach((tag) => {
             if (INITIATION_METHOD === 'page_onload') {
                 insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             } else if (INITIATION_METHOD === 'on_hover') {
@@ -43,9 +47,9 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
             } else if (INITIATION_METHOD === 'on_tap') {
                 setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             }
-        });
+        });*/
     } else if (PASTING === 'fixed_level') {
-        let tagsLevels = buildTagsLevels(objTextTags, tags);
+        /*let tagsLevels = buildTagsLevels(objTextTags, tags);
         if (tagsLevels[TAG_LEVEL]) {
             tagsLevels[TAG_LEVEL].forEach((tagHash) => {
                 if (INITIATION_METHOD === 'page_onload') {
@@ -56,9 +60,9 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                     setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
                 }
             });
-        }
+        }*/
     } else if (PASTING === 'content_tag') {
-        objTextTags.forEach((tag) => {
+        /*objTextTags.forEach((tag) => {
             if (tag.className.includes('content')) {
                 if (INITIATION_METHOD === 'page_onload') {
                     insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
@@ -68,9 +72,9 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
                     setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
                 }
             }
-        });
+        });*/
     } else if (PASTING === 'traversing_tree') {
-        let tagsChilds = [];
+        /*let tagsChilds = [];
         let tagsHashTextMap = [];
         objTextTags.forEach((tag) => {
             if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
@@ -131,8 +135,7 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
             } else if (INITIATION_METHOD === 'on_tap') {
                 setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
             }
-        });
-
+        });*/
     }
     if (INITIATION_METHOD === 'on_hover') {
         initHover();

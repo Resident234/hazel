@@ -3,7 +3,8 @@ import {API_KEY} from "./vars";
 import {hasIsTranslated, setIsTranslated} from "./services/dom";
 
 let LANGUAGE = '';
-let PASTING = '';
+let PASTING_METHOD = '';
+let INITIATION_METHOD = '';
 let TAG_LEVEL = '';
 
 /**
@@ -11,12 +12,6 @@ let TAG_LEVEL = '';
  * @type {string}
  */
 let TERM = 'sentence'; //sentence | text_inside_tag | text_along_with_tag
-
-/**
- * 2) Способ инициации перевода - после открытия страницы / при наведении на неделимую еденицу / при нажатии на неделимую еденицу
- * @type {string}
- */
-let INITIATION_METHOD = 'onload'; //onload | hover | click
 
 /**
  * 3) Разделитель предложений - точка / начало или конец тега / и то и другое
@@ -31,7 +26,7 @@ chrome.storage.sync.get({
   tagLevel: 1
 }, function(items) {
   LANGUAGE = items.lang;
-  PASTING = items.pasting;
+  PASTING_METHOD = items.pasting;
   TAG_LEVEL = items.tagLevel;
   INITIATION_METHOD = items.initiationMethod;
   if (!API_KEY) {
@@ -45,7 +40,7 @@ const portHasTranslated = chrome.extension.connect({
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
   if (msg.action === 'rerun' && !hasIsTranslated()) {
     setIsTranslated();//TODO: translate is running
-    Promise.all([enableTranslation(API_KEY, LANGUAGE, PASTING, TAG_LEVEL, INITIATION_METHOD)]).then(() => {
+    Promise.all([enableTranslation(API_KEY, LANGUAGE, PASTING_METHOD, TAG_LEVEL, INITIATION_METHOD)]).then(() => {
       setIsTranslated();
     });
   }
