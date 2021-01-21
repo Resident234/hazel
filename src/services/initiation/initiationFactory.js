@@ -2,7 +2,6 @@ import {pageOnload} from "./pageOnload";
 import {onHover} from "./onHover";
 import {onTap} from "./onTap";
 
-
 export class InitiationFactory {
     static serviceDescriptions = [
         {name: "page_onload", service: pageOnload},

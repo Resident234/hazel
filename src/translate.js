@@ -10,7 +10,7 @@ import {prepareTranslatedText} from "./services/helpers";
 import {translate} from "./services/translate";
 import {insertText2Page} from "./services/dom";
 
-export function enableTranslation(API_KEY, LANGUAGE, PASTING, TAG_LEVEL, INITIATION_METHOD) {
+export function enableTranslation(settings) {
     showSpinner();
     const objTextTags = textTags();
     if (!objTextTags.length) {
@@ -30,7 +30,7 @@ export function enableTranslation(API_KEY, LANGUAGE, PASTING, TAG_LEVEL, INITIAT
             const delay = 1000;
             setTimeout(resolve, delay);
         }).then(() => {
-            return translate(c, API_KEY, LANGUAGE);
+            return translate(c, settings.apiKey, settings.lang);
         });
     });
 
@@ -39,7 +39,7 @@ export function enableTranslation(API_KEY, LANGUAGE, PASTING, TAG_LEVEL, INITIAT
             if (text) {
                 text = prepareTranslatedText(text);
                 text = prepareDelimitersAfterTranslation(text);
-                insertText2Page(pageTextSplitted, text, PASTING, TAG_LEVEL, INITIATION_METHOD);
+                insertText2Page(pageTextSplitted, text, settings);
             }
             hideDelimitersOnDOM();//TODO: выполняется по несколько раз , вынести отсюда
             hideSpinner();

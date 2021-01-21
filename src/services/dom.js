@@ -11,7 +11,7 @@ import {initHover} from "../components/hover";
 import {initTap} from "../components/tap";
 import {PastingFactory} from "./pasting/pastingFactory";
 
-export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL, INITIATION_METHOD) => {
+export const insertText2Page = (originalText, translatedText, settings) => {
     let originalTextSplitted = originalText;
     let translatedTextSplitted = translatedText;
     const objTextTags = textTags();
@@ -19,124 +19,9 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
     //console.log(Object.assign({}, originalTextSplitted));
     //console.log(Object.assign({}, translatedTextSplitted));
 
-    let pastingStrategy = PastingFactory.getStrategy(PASTING);
-    pastingStrategy.execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags);
+    let pastingStrategy = PastingFactory.getStrategy(settings);
+    pastingStrategy.execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings);
 
-    if (PASTING === 'to_root') {
-        /*let tagsLevels = buildTagsLevels(objTextTags, tags);
-        let tagsLevel = tagsLevels.length - 1;
-        while (tagsLevel > 0) {
-            tagsLevels[tagsLevel].forEach((tagHash) => {
-                let tag = getTagByFingerprint(tagHash);
-                if (INITIATION_METHOD === 'page_onload') {
-                    insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                } else if (INITIATION_METHOD === 'on_hover') {
-                    setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                } else if (INITIATION_METHOD === 'on_tap') {
-                    setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                }
-            });
-            tagsLevel--;
-        }*/
-    } else if (PASTING === 'linear') {
-        /*objTextTags.forEach((tag) => {
-            if (INITIATION_METHOD === 'page_onload') {
-                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            } else if (INITIATION_METHOD === 'on_hover') {
-                setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            } else if (INITIATION_METHOD === 'on_tap') {
-                setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            }
-        });*/
-    } else if (PASTING === 'fixed_level') {
-        /*let tagsLevels = buildTagsLevels(objTextTags, tags);
-        if (tagsLevels[TAG_LEVEL]) {
-            tagsLevels[TAG_LEVEL].forEach((tagHash) => {
-                if (INITIATION_METHOD === 'page_onload') {
-                    insertTranslatedText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
-                } else if (INITIATION_METHOD === 'on_hover') {
-                    setHoverText2Tag(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
-                } else if (INITIATION_METHOD === 'on_tap') {
-                    setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                }
-            });
-        }*/
-    } else if (PASTING === 'content_tag') {
-        /*objTextTags.forEach((tag) => {
-            if (tag.className.includes('content')) {
-                if (INITIATION_METHOD === 'page_onload') {
-                    insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                } else if (INITIATION_METHOD === 'on_hover') {
-                    setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                } else if (INITIATION_METHOD === 'on_tap') {
-                    setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                }
-            }
-        });*/
-    } else if (PASTING === 'traversing_tree') {
-        /*let tagsChilds = [];
-        let tagsHashTextMap = [];
-        objTextTags.forEach((tag) => {
-            if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
-                tagsHashTextMap[getTagFingerprint(tag)] = tag.innerText;
-                if (tags.includes(tag.parentElement.tagName.toLowerCase())) {
-                    let parentTagFingerprint = generateFingerprintForTag(tag.parentElement);
-                    if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
-                        tagsChilds[md5(parentTagFingerprint).toString()] = [];
-                    }
-                    tagsChilds[md5(parentTagFingerprint).toString()].push(getTagFingerprint(tag));
-                }
-            }
-        });
-        let tagsLevels = buildTagsLevels(objTextTags, tags);
-        let tagsToTranslate = [];
-        let tagsToTranslateInit = [];
-        tagsLevels[0].forEach((tagHash) => {
-            tagsToTranslateInit.push(tagHash);
-        });
-        let stepToNextLevel = true;
-        let tagsToTranslateInitNextLevel = [];
-        while (stepToNextLevel) {
-            stepToNextLevel = false;
-            tagsToTranslateInit.forEach((tagHash) => {
-                let tag = getTagByFingerprint(tagHash);
-                let tagText = tag.innerText;
-                tagText = prepareDelimiters(tagText);
-                if (tagsChilds[tagHash]) {
-                    let arTagAllChildsText = [];
-                    let tagChildHashes = [];
-                    tagsChilds[tagHash].forEach((tagChildHash) => {
-                        let tagChild = getTagByFingerprint(tagChildHash);
-                        let tagChildText = tagChild.innerText;
-                        tagChildText = prepareDelimiters(tagChildText);
-                        arTagAllChildsText.push(tagChildText);
-                        tagChildHashes.push(tagChildHash);
-                    });
-                    let strTagAllChildsText = arTagAllChildsText.join('.');
-                    if (tagText.length === strTagAllChildsText.length) {
-                        tagsToTranslateInitNextLevel = [...tagsToTranslateInitNextLevel, ...tagChildHashes];
-                        stepToNextLevel = true;
-                    } else {
-                        tagsToTranslate.push(tagHash);
-                    }
-                } else {
-                    tagsToTranslate.push(tagHash);
-                }
-            });
-            tagsToTranslateInit = tagsToTranslateInitNextLevel;
-            tagsToTranslateInitNextLevel = [];
-        }
-        tagsToTranslate.forEach((tagHash) => {
-            let tag = (getTagByFingerprint(tagHash));
-            if (INITIATION_METHOD === 'page_onload') {
-                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            } else if (INITIATION_METHOD === 'on_hover') {
-                setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            } else if (INITIATION_METHOD === 'on_tap') {
-                setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            }
-        });*/
-    }
     if (INITIATION_METHOD === 'on_hover') {
         initHover();
     }

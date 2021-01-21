@@ -6,7 +6,7 @@ import {prepareDelimiters} from "../../components/delimiters";
 import {InitiationFactory} from "../initiation/initiationFactory";
 
 export class traversingTree {
-    static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags) {
+    static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) {
         let tagsChilds = [];
         let tagsHashTextMap = [];
         objTextTags.forEach((tag) => {
@@ -59,7 +59,7 @@ export class traversingTree {
             tagsToTranslateInit = tagsToTranslateInitNextLevel;
             tagsToTranslateInitNextLevel = [];
         }
-        let strategy = InitiationFactory.getStrategy(INITIATION_METHOD);
+        let strategy = InitiationFactory.getStrategy(settings.initiationMethod);
         tagsToTranslate.forEach((tagHash) => {
             let tag = (getTagByFingerprint(tagHash));
             strategy.execute(tag, originalTextSplitted, translatedTextSplitted);

@@ -2,10 +2,13 @@ import { enableTranslation } from './translate';
 import {API_KEY} from "./vars";
 import {hasIsTranslated, setIsTranslated} from "./services/dom";
 
-let LANGUAGE = '';
-let PASTING_METHOD = '';
-let INITIATION_METHOD = '';
-let TAG_LEVEL = '';
+let settings = {
+  apiKey: API_KEY,
+  language: '',
+  pastingMethod: '',
+  initiationMethod: '',
+  tagLevel: ''
+};
 
 /**
  * 1) Тип неделимой еденицы - предложение / текст внутри тега / текст вместе с тегом
@@ -25,13 +28,7 @@ chrome.storage.sync.get({
   initiationMethod: 'page_onload',
   tagLevel: 1
 }, function(items) {
-  LANGUAGE = items.lang;
-  PASTING_METHOD = items.pasting;
-  TAG_LEVEL = items.tagLevel;
-  INITIATION_METHOD = items.initiationMethod;
-  if (!API_KEY) {
-    console.error('There is no API key in options for translation.');
-  }
+  settings = {...settings, ...items};
 });
 const portHasTranslated = chrome.extension.connect({
   name: "hasTranslated"
@@ -40,7 +37,7 @@ const portHasTranslated = chrome.extension.connect({
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
   if (msg.action === 'rerun' && !hasIsTranslated()) {
     setIsTranslated();//TODO: translate is running
-    Promise.all([enableTranslation(API_KEY, LANGUAGE, PASTING_METHOD, TAG_LEVEL, INITIATION_METHOD)]).then(() => {
+    Promise.all([enableTranslation(settings)]).then(() => {
       setIsTranslated();
     });
   }

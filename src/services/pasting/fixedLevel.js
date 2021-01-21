@@ -4,11 +4,11 @@ import {getTagByFingerprint} from "../tagsFingerprint";
 import {InitiationFactory} from "../initiation/initiationFactory";
 
 export class fixedLevel {
-    static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags) {
+    static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) {
         let tagsLevels = buildTagsLevels(objTextTags, tags);
-        if (tagsLevels[TAG_LEVEL]) {
-            let strategy = InitiationFactory.getStrategy(INITIATION_METHOD);
-            tagsLevels[TAG_LEVEL].forEach((tagHash) => {
+        if (tagsLevels[settings.tagLevel]) {
+            let strategy = InitiationFactory.getStrategy(settings.initiationMethod);
+            tagsLevels[settings.tagLevel].forEach((tagHash) => {
                 strategy.execute(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
             });
         }

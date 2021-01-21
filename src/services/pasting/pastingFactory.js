@@ -13,7 +13,7 @@ export class PastingFactory {
         {name: "traversing_tree", service: traversingTree}
     ];
 
-    static getStrategy = (name) => {
-        return this.serviceDescriptions.find(element => element.name === name);
+    static getStrategy = (settings) => {
+        return this.serviceDescriptions.find(element => element.name === settings.pasting);
     };
 }
