@@ -4,7 +4,7 @@ import {fixedLevel} from "./fixedLevel";
 import {contentTag} from "./contentTag";
 import {traversingTree} from "./traversingTree";
 
-export class Factory {
+export class PastingFactory {
     static serviceDescriptions = [
         {name: "to_root", service: toRoot},
         {name: "linear", service: linear},

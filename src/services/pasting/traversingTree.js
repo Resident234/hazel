@@ -3,6 +3,7 @@ import {tags} from "../tags";
 import md5 from "crypto-js/md5";
 import {buildTagsLevels} from "../tagsLevels";
 import {prepareDelimiters} from "../../components/delimiters";
+import {InitiationFactory} from "../initiation/initiationFactory";
 
 export class traversingTree {
     static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags) {
@@ -58,15 +59,10 @@ export class traversingTree {
             tagsToTranslateInit = tagsToTranslateInitNextLevel;
             tagsToTranslateInitNextLevel = [];
         }
+        let strategy = InitiationFactory.getStrategy(INITIATION_METHOD);
         tagsToTranslate.forEach((tagHash) => {
             let tag = (getTagByFingerprint(tagHash));
-            if (INITIATION_METHOD === 'page_onload') {
-                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            } else if (INITIATION_METHOD === 'on_hover') {
-                setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            } else if (INITIATION_METHOD === 'on_tap') {
-                setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            }
+            strategy.execute(tag, originalTextSplitted, translatedTextSplitted);
         });
     }
 }

@@ -1,16 +1,12 @@
 import {tags} from "../tags";
+import {InitiationFactory} from "../initiation/initiationFactory";
 
 export class contentTag {
     static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags) {
+        let strategy = InitiationFactory.getStrategy(INITIATION_METHOD);
         objTextTags.forEach((tag) => {
             if (tag.className.includes('content')) {
-                if (INITIATION_METHOD === 'page_onload') {
-                    insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                } else if (INITIATION_METHOD === 'on_hover') {
-                    setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                } else if (INITIATION_METHOD === 'on_tap') {
-                    setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-                }
+                strategy.execute(tag, originalTextSplitted, translatedTextSplitted);
             }
         });
     }

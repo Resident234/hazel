@@ -1,13 +1,11 @@
+import {InitiationFactory} from "../initiation/initiationFactory";
+import {getTagByFingerprint} from "../tagsFingerprint";
+
 export class linear {
     static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags) {
+        let strategy = InitiationFactory.getStrategy(INITIATION_METHOD);
         objTextTags.forEach((tag) => {
-            if (INITIATION_METHOD === 'page_onload') {
-                insertTranslatedText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            } else if (INITIATION_METHOD === 'on_hover') {
-                setHoverText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            } else if (INITIATION_METHOD === 'on_tap') {
-                setTapText2Tag(tag, originalTextSplitted, translatedTextSplitted);
-            }
+            strategy.execute(tag, originalTextSplitted, translatedTextSplitted);
         });
     }
 }

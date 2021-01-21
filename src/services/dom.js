@@ -9,7 +9,7 @@ import {buildTagsLevels} from "./tagsLevels";
 import {generateFingerprintForTag, getTagByFingerprint, getTagFingerprint} from "./tagsFingerprint";
 import {initHover} from "../components/hover";
 import {initTap} from "../components/tap";
-import {Factory} from "./pasting/factory";
+import {PastingFactory} from "./pasting/pastingFactory";
 
 export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL, INITIATION_METHOD) => {
     let originalTextSplitted = originalText;
@@ -19,8 +19,8 @@ export const insertText2Page = (originalText, translatedText, PASTING, TAG_LEVEL
     //console.log(Object.assign({}, originalTextSplitted));
     //console.log(Object.assign({}, translatedTextSplitted));
 
-    let strategy = Factory.getStrategy(PASTING);
-    strategy.execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags);
+    let pastingStrategy = PastingFactory.getStrategy(PASTING);
+    pastingStrategy.execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags);
 
     if (PASTING === 'to_root') {
         /*let tagsLevels = buildTagsLevels(objTextTags, tags);
