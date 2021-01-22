@@ -34,7 +34,6 @@ export function initTap() {
                     );
                 }
             }
-
         };
         element.onmouseover = function (event) {
             if (event.target.tagName.toLowerCase() === 'tap') {

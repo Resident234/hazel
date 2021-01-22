@@ -2,14 +2,11 @@ import {pageOnload} from "./pageOnload";
 import {onHover} from "./onHover";
 import {onTap} from "./onTap";
 
-export class InitiationFactory {
-    static serviceDescriptions = [
-        {name: "page_onload", service: pageOnload},
-        {name: "on_hover", service: onHover},
-        {name: "on_tap", service: onTap}
+export const getInitiationStrategy = (name) => {
+    const serviceDescriptions = [
+        {name: "page_onload", function: pageOnload},
+        {name: "on_hover", function: onHover},
+        {name: "on_tap", function: onTap}
     ];
-
-    static getStrategy = (name) => {
-        return this.serviceDescriptions.find(element => element.name === name);
-    };
-}
+    return serviceDescriptions.find(element => element.name === name).function;
+};

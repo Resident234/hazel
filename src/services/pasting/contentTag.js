@@ -1,13 +1,14 @@
 import {tags} from "../tags";
-import {InitiationFactory} from "../initiation/initiationFactory";
+import {getInitiationStrategy} from "../initiation/initiationFactory";
+import {getComponentsStrategy} from "../../components/componentsFactory";
 
-export class contentTag {
-    static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) {
-        let strategy = InitiationFactory.getStrategy(settings.initiationMethod);
-        objTextTags.forEach((tag) => {
-            if (tag.className.includes('content')) {
-                strategy.execute(tag, originalTextSplitted, translatedTextSplitted);
-            }
-        });
-    }
+export const contentTag = (objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) => {
+    let strategy = getInitiationStrategy(settings.initiationMethod);
+    objTextTags.forEach((tag) => {
+        if (tag.className.includes('content')) {
+            strategy(tag, originalTextSplitted, translatedTextSplitted);
+        }
+    });
+    strategy = getComponentsStrategy(settings.initiationMethod);
+    strategy();
 }

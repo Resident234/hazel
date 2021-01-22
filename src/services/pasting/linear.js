@@ -1,11 +1,11 @@
-import {InitiationFactory} from "../initiation/initiationFactory";
-import {getTagByFingerprint} from "../tagsFingerprint";
+import {getInitiationStrategy} from "../initiation/initiationFactory";
+import {getComponentsStrategy} from "../../components/componentsFactory";
 
-export class linear {
-    static execute(objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) {
-        let strategy = InitiationFactory.getStrategy(INITIATION_METHOD);
-        objTextTags.forEach((tag) => {
-            strategy.execute(tag, originalTextSplitted, translatedTextSplitted);
-        });
-    }
+export const linear = (objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) => {
+    let strategy = getInitiationStrategy(settings.initiationMethod);
+    objTextTags.forEach((tag) => {
+        strategy(tag, originalTextSplitted, translatedTextSplitted);
+    });
+    strategy = getComponentsStrategy(settings.initiationMethod);
+    strategy();
 }

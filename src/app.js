@@ -28,7 +28,11 @@ chrome.storage.sync.get({
   initiationMethod: 'page_onload',
   tagLevel: 1
 }, function(items) {
-  settings = {...settings, ...items};
+  //settings = {...settings, ...items};
+  settings.lang = items.lang;
+  settings.pasting = items.pasting;
+  settings.initiationMethod = items.initiationMethod;
+  settings.tagLevel = items.tagLevel;
 });
 const portHasTranslated = chrome.extension.connect({
   name: "hasTranslated"
