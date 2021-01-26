@@ -12,6 +12,8 @@ export const fixedLevel = (objTextTags, originalTextSplitted, translatedTextSpli
             strategy(getTagByFingerprint(tagHash), originalTextSplitted, translatedTextSplitted);
         });
         strategy = getComponentsStrategy(settings.initiationMethod);
-        strategy();
+        if (strategy) {
+            strategy();
+        }
     }
 }

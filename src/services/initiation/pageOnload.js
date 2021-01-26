@@ -1,8 +1,8 @@
 import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT} from "../../components/delimiters";
 
 export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) => {
-    console.log(tag);
-    if (tag.innerText.length > 0) {
+    //console.log(tag.innerText);
+    if (tag && tag.innerText.length > 0) {
         if (!tag.classList.contains('js-translator-delimiter')) {
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
                 originalTextItem = originalTextItem.trim();

@@ -7,3 +7,13 @@ export function prepareTranslatedText(text) {
     });
     return textPrepared;
 }
+
+export function sanitizeTextArray(text) {
+    text = text.filter(item => item);
+    text = text.filter((item) => item.trim() !== "");
+    let textPrepared = [];
+    text.forEach((item) => {
+        textPrepared.push(item.trim());
+    });
+    return textPrepared;
+}

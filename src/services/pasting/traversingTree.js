@@ -65,5 +65,7 @@ export const traversingTree = (objTextTags, originalTextSplitted, translatedText
         strategy(tag, originalTextSplitted, translatedTextSplitted);
     });
     strategy = getComponentsStrategy(settings.initiationMethod);
-    strategy();
+    if (strategy) {
+        strategy();
+    }
 }

@@ -32,11 +32,6 @@ export function prepareDelimiters(text) {
     return text;
 }
 
-export function prepareDelimitersAfterTranslation(text) {
-    //DELIMITER_EXCLUSION.forEach(function(item) { text.replaceAll(item.replaceAll(DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_FOR_EXCLUSION), item); });
-    return text;
-}
-
 export function hideDelimitersOnDOM() {
     let divsToHide = document.getElementsByClassName(DELIMITER_CLASS);
     for (let i = 0; i < divsToHide.length; i++) {

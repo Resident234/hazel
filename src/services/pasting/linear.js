@@ -7,5 +7,7 @@ export const linear = (objTextTags, originalTextSplitted, translatedTextSplitted
         strategy(tag, originalTextSplitted, translatedTextSplitted);
     });
     strategy = getComponentsStrategy(settings.initiationMethod);
-    strategy();
+    if (strategy) {
+        strategy();
+    }
 }

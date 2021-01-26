@@ -6,5 +6,6 @@ export const getComponentsStrategy = (name) => {
         {name: "on_hover", function: initHover},
         {name: "on_tap", function: initTap}
     ];
-    return serviceDescriptions.find(element => element.name === name).function;
+    let serviceDescription = serviceDescriptions.find(element => element.name === name);
+    return (serviceDescription !== undefined) ? serviceDescription.function : false;
 };

@@ -10,5 +10,7 @@ export const contentTag = (objTextTags, originalTextSplitted, translatedTextSpli
         }
     });
     strategy = getComponentsStrategy(settings.initiationMethod);
-    strategy();
+    if (strategy) {
+        strategy();
+    }
 }

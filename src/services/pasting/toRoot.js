@@ -16,5 +16,7 @@ export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted
         tagsLevel--;
     }
     strategy = getComponentsStrategy(settings.initiationMethod);
-    strategy();
+    if (strategy) {
+        strategy();
+    }
 }
