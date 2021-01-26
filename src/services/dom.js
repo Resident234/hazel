@@ -12,15 +12,13 @@ import {initTap} from "../components/tap";
 import {getPastingStrategy} from "./pasting/pastingFactory";
 
 export const insertText2Page = (originalText, translatedText, settings) => {
-    let originalTextSplitted = originalText;
-    let translatedTextSplitted = translatedText;
     const objTextTags = textTags();
 
     //console.log(Object.assign({}, originalTextSplitted));
     //console.log(Object.assign({}, translatedTextSplitted));
 
     let pastingStrategy = getPastingStrategy(settings);
-    pastingStrategy(objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings);
+    pastingStrategy(objTextTags, originalText, translatedText, tags, settings);
 }
 
 export const setIsTranslated = () => {

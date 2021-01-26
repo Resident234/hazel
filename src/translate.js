@@ -40,7 +40,7 @@ export function enableTranslation(settings) {
         .then((pageTranslatedTextSplitted) => {
             if (pageTranslatedTextSplitted) {
                 pageTranslatedTextSplitted = prepareTranslatedText(pageTranslatedTextSplitted);
-                //insertText2Page(pageTextSplitted, pageTranslatedTextSplitted, settings);
+                insertText2Page(pageTextSplitted, pageTranslatedTextSplitted, settings);
             }
             hideDelimitersOnDOM();
             hideSpinner();

@@ -13,11 +13,11 @@ export const traversingTree = (objTextTags, originalTextSplitted, translatedText
         if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
             tagsHashTextMap[getTagFingerprint(tag)] = tag.innerText;
             if (tags.includes(tag.parentElement.tagName.toLowerCase())) {
-                let parentTagFingerprint = generateFingerprintForTag(tag.parentElement);
-                if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
-                    tagsChilds[md5(parentTagFingerprint).toString()] = [];
+                let parentTagFingerprint = getTagFingerprint(tag.parentElement);
+                if (!tagsChilds[parentTagFingerprint]) {
+                    tagsChilds[parentTagFingerprint] = [];
                 }
-                tagsChilds[md5(parentTagFingerprint).toString()].push(getTagFingerprint(tag));
+                tagsChilds[parentTagFingerprint].push(getTagFingerprint(tag));
             }
         }
     });
@@ -59,13 +59,13 @@ export const traversingTree = (objTextTags, originalTextSplitted, translatedText
         tagsToTranslateInit = tagsToTranslateInitNextLevel;
         tagsToTranslateInitNextLevel = [];
     }
-    let strategy = getInitiationStrategy(settings.initiationMethod);
+    let initiationStrategy = getInitiationStrategy(settings.initiationMethod);
     tagsToTranslate.forEach((tagHash) => {
         let tag = (getTagByFingerprint(tagHash));
-        strategy(tag, originalTextSplitted, translatedTextSplitted);
+        initiationStrategy(tag, originalTextSplitted, translatedTextSplitted);
     });
-    strategy = getComponentsStrategy(settings.initiationMethod);
-    if (strategy) {
-        strategy();
+    let componentStrategy = getComponentsStrategy(settings.initiationMethod);
+    if (componentStrategy) {
+        componentStrategy();
     }
 }

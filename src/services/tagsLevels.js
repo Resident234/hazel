@@ -9,11 +9,11 @@ export const buildTagsLevels = (tags, tagsNames) => {
     tags.forEach((tag) => {
         if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
             if (tagsNames.includes(tag.parentElement.tagName.toLowerCase())) {
-                let parentTagFingerprint = generateFingerprintForTag(tag.parentElement);
-                if (!tagsChilds[md5(parentTagFingerprint).toString()]) {
-                    tagsChilds[md5(parentTagFingerprint).toString()] = [];
+                let parentTagFingerprint = getTagFingerprint(tag.parentElement);
+                if (!tagsChilds[parentTagFingerprint]) {
+                    tagsChilds[parentTagFingerprint] = [];
                 }
-                tagsChilds[md5(parentTagFingerprint).toString()].push(getTagFingerprint(tag));
+                tagsChilds[parentTagFingerprint].push(getTagFingerprint(tag));
             } else if (bodySelector() === tag.parentElement.tagName.toLowerCase()) {
                 tagsLevels[0].push(getTagFingerprint(tag));
             }
