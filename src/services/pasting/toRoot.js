@@ -11,13 +11,8 @@ export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted
     let tagsFingerprints = getTagsFingerprints(textTags());
     while (tagsLevel > 0) {
         tagsLevels[tagsLevel].forEach((tagHash) => {
-            console.log(tagsLevel);
-            console.log(tagHash);
             let tag = getTagByFingerprint(tagHash, tagsFingerprints);
-            console.log(tag);
-            console.log('============');
-
-            //initiationStrategy(tag, originalTextSplitted, translatedTextSplitted);
+            initiationStrategy(tag, originalTextSplitted, translatedTextSplitted);
         });
         tagsLevel--;
     }
