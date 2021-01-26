@@ -1,8 +1,7 @@
 import {textTags} from "./tags";
 import md5 from "crypto-js/md5";
 
-export const getTagByFingerprint = (tagHash) => {
-    let tagsFingerprints = getTagsFingerprints(textTags());
+export const getTagByFingerprint = (tagHash, tagsFingerprints) => {
     return tagsFingerprints[tagHash];
 }
 
