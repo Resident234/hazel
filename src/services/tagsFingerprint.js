@@ -18,9 +18,7 @@ export const getTagsFingerprints = (tags) => {
 
 export const getTagFingerprint = (tag) => {
     let fingerprint = concatenateTagParams(tag);
-    let hash = md5(fingerprint).toString();
-    console.log(hash);
-    return hash;
+    return md5(fingerprint).toString();
 }
 
 const concatenateTagParams = (tag) => {

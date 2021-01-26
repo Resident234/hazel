@@ -25,10 +25,10 @@ export const tags = [
 ];
 export const tagSelector = () => {
     return tags.map((t) => {
-        return '' + t;
+        return '' + t + ':not(.js-translator-component-element)';
     })
         .concat(tags.map((t) => {
-            return '' + t;
+            return '' + t + ':not(.js-translator-component-element)';
         }))
         .join(', ');
 };
