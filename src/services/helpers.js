@@ -1,3 +1,5 @@
+import {excludeTextTags} from "./tags";
+
 export function prepareTranslatedText(text) {
     let textPrepared = [];
     text.forEach((item) => {
@@ -16,4 +18,12 @@ export function sanitizeTextArray(text) {
         textPrepared.push(item.trim());
     });
     return textPrepared;
+}
+
+export function prepareTextBeforeSubmitToTranslation(text) {
+    let objExcludeTextTags = excludeTextTags();
+    objExcludeTextTags.forEach((excludeTag) => {
+        text = text.replace(excludeTag.innerText, '');
+    });
+    return text;
 }

@@ -1,12 +1,17 @@
 import {hideSpinner, showSpinner} from "./components/spinner";
-import {bodySelector, textTags} from "./services/tags";
+import {bodySelector, excludeTextTags, textTags} from "./services/tags";
 import {
-    DELIMITER_FOR_TRANSLATED_TEXT,
+    DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_HTML,
     hideDelimitersOnDOM,
     insertDelimitersOnDOM, prepareDelimitersAfterTranslation,
     prepareDelimitersBeforeSubmitToTranslation
 } from "./components/delimiters";
-import {prepareTranslatedText, sanitizeText, sanitizeTextArray} from "./services/helpers";
+import {
+    prepareTextBeforeSubmitToTranslation,
+    prepareTranslatedText,
+    sanitizeText,
+    sanitizeTextArray
+} from "./services/helpers";
 import {translate} from "./services/translate";
 import {insertText2Page} from "./services/dom";
 
@@ -21,10 +26,12 @@ export function enableTranslation(settings) {
 
     let objBodyTag = document.querySelector(bodySelector());
     let pageText = objBodyTag.innerText;
+    pageText = prepareTextBeforeSubmitToTranslation(pageText);
     pageText = prepareDelimitersBeforeSubmitToTranslation(pageText);
     let pageTextSplitted = pageText.split(DELIMITER_FOR_TRANSLATED_TEXT);
     pageTextSplitted = sanitizeTextArray(pageTextSplitted);
 
+    //TODO: обойти проблему https://bugs.chromium.org/p/chromium/issues/detail?id=108055
     const promises = pageTextSplitted.map((c) => {
         return new Promise((resolve) => {
             // make some delay because the maximum rate limit of Google API is 10 qps per IP address.
@@ -47,4 +54,5 @@ export function enableTranslation(settings) {
         }, () => {
         });
 }
+
 

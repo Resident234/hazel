@@ -1,6 +1,4 @@
-import {generateFingerprintForTag, getTagByFingerprint, getTagFingerprint} from "../tagsFingerprint";
-import {tags} from "../tags";
-import md5 from "crypto-js/md5";
+import {getTagByFingerprint, getTagFingerprint} from "../tagsFingerprint";
 import {buildTagsLevels} from "../tagsLevels";
 import {prepareDelimiters} from "../../components/delimiters";
 import {getInitiationStrategy} from "../initiation/initiationFactory";

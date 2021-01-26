@@ -44,3 +44,17 @@ export const textTags = () => {
 export const bodyTag = () => {
     return document.querySelector(bodySelector());
 }
+
+export const excludeTags = ['code'];
+export const excludeTagsSelector = () => {
+    return excludeTags.map((t) => {
+        return '' + t;
+    })
+        .concat(excludeTags.map((t) => {
+            return '' + t;
+        }))
+        .join(', ');
+};
+export const excludeTextTags = () => {
+    return document.querySelectorAll(excludeTagsSelector());
+}

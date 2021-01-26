@@ -3,7 +3,10 @@ import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT} from "../../components/de
 export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) => {
     //console.log(tag.innerText);
     if (tag && tag.innerText.length > 0) {
-        if (!tag.classList.contains('js-translator-delimiter')) {
+        if (
+            !tag.classList.contains('js-translator-delimiter') &&
+            !tag.classList.contains('js-translator-tag-has-translated')
+        ) {
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
                 originalTextItem = originalTextItem.trim();
                 if (originalTextItem.length > 0) {
@@ -31,6 +34,7 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                                     originalTextItem,
                                     originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, "")
                                 );
+                                tag.classList.add('js-translator-tag-has-translated');
                                 if (innerHTMLPrev !== tag.innerHTML) {
                                     originalTextSplitted.splice(translateIndex, 1);
                                     translatedTextSplitted.splice(translateIndex, 1);
