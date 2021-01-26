@@ -21,14 +21,41 @@ export const getTagFingerprint = (tag) => {
 }
 
 const concatenateTagParams = (tag) => {
-    return tag.className +
-    tag.getAttributeNames().join(' ') +
-    tag.id +
-    tag.localName +
-    tag.outerHTML +
-    tag.tagName +
-    tag.namespaceURI +
-    tag.nodeName +
-    tag.nodeValue +
-    tag.textContent;
+    let tagParams = tag.className +
+        tag.getAttributeNames().join(' ') +
+        tag.id +
+        tag.localName +
+        tag.outerHTML +
+        tag.tagName +
+        tag.namespaceURI +
+        tag.nodeName +
+        tag.nodeValue +
+        tag.textContent;
+    let tagParents = getAllParentsElements(tag);
+    tagParents.forEach((tagParent) => {
+        tagParams += tagParent.className;// +
+            /*tagParent.getAttributeNames().join(' ') +
+            tagParent.id +
+            tagParent.localName +
+            tagParent.outerHTML +
+            tagParent.tagName +
+            tagParent.namespaceURI +
+            tagParent.nodeName +
+            tagParent.nodeValue +
+            tagParent.textContent;*/
+    });
+    return tagParams;
+}
+
+const getAllParentsElements = (tag) => {
+    let parentElements = [];
+    while (1) {
+        if (tag && tag.parentElement) {
+            parentElements.push(tag.parentElement);
+            tag = tag.parentElement;
+        } else {
+            break;
+        }
+    }
+    return parentElements;
 }
