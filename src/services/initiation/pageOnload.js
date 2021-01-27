@@ -1,4 +1,4 @@
-import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT} from "../../components/delimiters";
+import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT, prepareDelimiters} from "../../components/delimiters";
 
 export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) => {
     //console.log(tag.innerText);
@@ -30,14 +30,19 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
 
                             /** защита от замены при которой заменяется только фрагмент предложения **/
                             if (innerTextSplittedFiltered.includes(originalTextItem)) {
-                                tag.innerHTML = tag.innerHTML.replace(
-                                    originalTextItem,
-                                    originalTextItem + '. ' + translatedTextSplitted[translateIndex].replace(/\.$/, "")
-                                );
-                                tag.classList.add('js-translator-tag-has-translated');
-                                if (innerHTMLPrev !== tag.innerHTML) {
-                                    originalTextSplitted.splice(translateIndex, 1);
-                                    translatedTextSplitted.splice(translateIndex, 1);
+                                let translatedText = translatedTextSplitted[translateIndex].replace(/\.$/, "");
+                                /** защита от повторной замены **/
+                                let normalizedOriginalText = prepareDelimiters(tag.innerText);
+                                if (normalizedOriginalText.substr(normalizedOriginalText.length - translatedText.length) !== translatedText) {
+                                    tag.innerHTML = tag.innerHTML.replace(
+                                        originalTextItem,
+                                        originalTextItem + '. ' + translatedText
+                                    );
+                                    tag.classList.add('js-translator-tag-has-translated');
+                                    if (innerHTMLPrev !== tag.innerHTML) {
+                                        originalTextSplitted.splice(translateIndex, 1);
+                                        translatedTextSplitted.splice(translateIndex, 1);
+                                    }
                                 }
                             }
                         } else {
