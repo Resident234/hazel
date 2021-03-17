@@ -15,15 +15,19 @@ export function sanitizeTextArray(text) {
     text = text.filter((item) => item.trim() !== "");
     let textPrepared = [];
     text.forEach((item) => {
+        item = item.replace("↵", "");
+        item = item.replace(/\r?\n|\r/g, '');
         textPrepared.push(item.trim());
     });
-    return textPrepared;
+    text = textPrepared;
+    text = text.filter((item) => item.trim() !== "");
+    return text;
 }
 
 export function prepareTextBeforeSubmitToTranslation(text) {
     let objExcludeTextTags = excludeTextTags();
-    objExcludeTextTags.forEach((excludeTag) => {
-        text = text.replace(excludeTag.innerText, '');
+    objExcludeTextTags.forEach((excludeTag, index) => {
+        text = text.replace(excludeTag.innerText, '');//<==' + index + '==>
     });
     return text;
 }

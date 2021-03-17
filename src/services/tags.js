@@ -22,6 +22,24 @@ export const tags = [
     'nav',
     'aside',
     'select',
+    'article',
+    'main',
+    'label',
+    'form',
+    'details-menu',
+    'summary',
+    'details',
+    'include-fragment',
+    'notifications-list-subscription-form',
+    'button',
+    'details-dialog',
+    'legend',
+    'fieldset',
+    'tab-container',
+    'input-demux',
+    'ref-selector',
+    'footer',
+    'clipboard-copy',
 ];
 export const tagSelector = () => {
     return tags.map((t) => {
@@ -57,4 +75,8 @@ export const excludeTagsSelector = () => {
 };
 export const excludeTextTags = () => {
     return document.querySelectorAll(excludeTagsSelector());
+}
+
+export const allTags = () => {
+    return document.querySelectorAll('*');
 }

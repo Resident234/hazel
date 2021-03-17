@@ -30,14 +30,14 @@ export const traversingTree = (objTextTags, originalTextSplitted, translatedText
     while (stepToNextLevel) {
         stepToNextLevel = false;
         tagsToTranslateInit.forEach((tagHash) => {
-            let tag = getTagByFingerprint(tagHash);
+            let tag = getTagByFingerprint(tagHash, objTextTags);
             let tagText = tag.innerText;
             tagText = prepareDelimiters(tagText);
             if (tagsChilds[tagHash]) {
                 let arTagAllChildsText = [];
                 let tagChildHashes = [];
                 tagsChilds[tagHash].forEach((tagChildHash) => {
-                    let tagChild = getTagByFingerprint(tagChildHash);
+                    let tagChild = getTagByFingerprint(tagChildHash, objTextTags);
                     let tagChildText = tagChild.innerText;
                     tagChildText = prepareDelimiters(tagChildText);
                     arTagAllChildsText.push(tagChildText);
@@ -57,12 +57,12 @@ export const traversingTree = (objTextTags, originalTextSplitted, translatedText
         tagsToTranslateInit = tagsToTranslateInitNextLevel;
         tagsToTranslateInitNextLevel = [];
     }
-    let initiationStrategy = getInitiationStrategy(settings.initiationMethod);
+    let initiationStrategy = getInitiationStrategy(settings.initiation);
     tagsToTranslate.forEach((tagHash) => {
-        let tag = (getTagByFingerprint(tagHash));
+        let tag = (getTagByFingerprint(tagHash, objTextTags));
         initiationStrategy(tag, originalTextSplitted, translatedTextSplitted);
     });
-    let componentStrategy = getComponentsStrategy(settings.initiationMethod);
+    let componentStrategy = getComponentsStrategy(settings.initiation);
     if (componentStrategy) {
         componentStrategy();
     }

@@ -1,15 +1,26 @@
 import {textTags} from "./tags";
 import md5 from "crypto-js/md5";
 
-export const getTagByFingerprint = (tagHash, tagsFingerprints) => {
-    return tagsFingerprints[tagHash];
+export const getTagByFingerprint = (tagHash, tags) => {
+    var tagsFingerprints = (function() {
+        var tagsFingerprints = [];
+        tags.forEach((tag) => {
+            let fingerprint = concatenateTagParams(tag);
+            let hash = md5(fingerprint);
+            //console.log(tag.innerText + hash.toString());
+            tagsFingerprints[hash.toString()] = tag;
+        });
+        return function() { return tagsFingerprints; };
+    })();
+    return tagsFingerprints()[tagHash];
 }
 
 export const getTagsFingerprints = (tags) => {
-    let tagsFingerprints = [];
+    var tagsFingerprints = [];
     tags.forEach((tag) => {
         let fingerprint = concatenateTagParams(tag);
         let hash = md5(fingerprint);
+        //console.log(tag.innerText + hash.toString());
         tagsFingerprints[hash.toString()] = tag;
     });
     return tagsFingerprints;
@@ -31,6 +42,7 @@ const concatenateTagParams = (tag) => {
         tag.nodeName +
         tag.nodeValue +
         tag.textContent;
+        //"";
     let tagParents = getAllParentsElements(tag);
     tagParents.forEach((tagParent) => {
         tagParams += tagParent.className;// +
