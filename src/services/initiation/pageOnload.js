@@ -50,7 +50,6 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                             originalTextItem.length > 0
                         )
                     ) {
-
                         if (originalTextItem !== translatedTextSplitted[translateIndex]) {
                             let innerHTMLPrev = tag.innerHTML;
 

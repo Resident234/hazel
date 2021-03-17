@@ -12,17 +12,10 @@ export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted
     let tagsLevel = tagsLevels.length - 1;
     let initiationStrategy = getInitiationStrategy(settings.initiation);
 
-    //console.log(tagsMap);
-    //tagsTree - дерево тегов
-    //tagsOriginalTextTree - дерево из оригинального текста
-    //tagsTranslatedTextTree - дерево из переведенного текста
-    //tagsOriginalTextMap - [отпечаток тега] => [элементы из originalTextSplitted , входящие в этот тег]
-    //tagsTranslatedTextMap - [отпечаток тега] => [элементы из translatedTextSplitted , входящие в этот тег]
-
-    //console.log(tagsLevels);
     while (tagsLevel > 0) {
         tagsLevels[tagsLevel].forEach((tagHash) => {
-            let tag = getTagByFingerprint(tagHash, objTextTags);
+            let tag = tagsMap[tagHash].tag;
+            console.log(tag);
             if (tagsMap[tagHash].originalTextSplitted.length > 0) {
                 let originalTextSplittedLocal = tagsMap[tagHash].originalTextSplitted;
                 let translatedTextSplittedLocal = [];
@@ -31,12 +24,15 @@ export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted
                     let index = originalTextSplitted.findIndex(item => item === text);
                     if (translatedTextSplitted[index] !== undefined) {
                         translatedTextSplittedLocal.push(translatedTextSplitted[index]);
+                        commonIndexes.push(index);
                     } else {
                         translatedTextSplittedLocal.push(text);
                     }
-                    commonIndexes.push(index);
                 });
 
+                //console.log(originalTextSplittedLocal);
+                //console.log(translatedTextSplittedLocal);
+                //console.log('--------');
                 initiationStrategy(tag, originalTextSplittedLocal, translatedTextSplittedLocal);
 
                 commonIndexes.forEach((index) => {
