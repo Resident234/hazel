@@ -1,6 +1,6 @@
 const DELIMITER_CLASS = 'js-translator-delimiter';
 export const DELIMITER_HTML = `<delimiter class="${DELIMITER_CLASS} translator-delimiter"><-></delimiter>`;
-export const DELIMITER_TEXT = '<->';
+export const DELIMITER_TEXT = '<->';//TODO: подобрать более подходящий уникальный символ
 export const DELIMITER_FOR_TRANSLATED_TEXT = '.';
 export const DELIMITER_EXCLUSION = ['Node.js'];
 export const DELIMITER_FOR_EXCLUSION = '_';
@@ -46,4 +46,9 @@ export function insertDelimitersOnDOM(objTextTags) {
             tag.insertAdjacentHTML('afterbegin', DELIMITER_HTML);
         }
     });
+    let delimiters = document.getElementsByClassName(DELIMITER_CLASS);
+    for (let i = 0; i < delimiters.length; i++) {
+        delimiters[i].style.display = 'none';
+        delimiters[i].style.color = 'transparent';
+    }
 }
