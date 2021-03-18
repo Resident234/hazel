@@ -1,5 +1,6 @@
 import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT, prepareDelimiters} from "../../components/delimiters";
 import {excludeTextTags} from "../tags";
+import {splitText} from "../helpers";
 
 export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) => {
     if (tag && tag.innerText.length > 0) {
@@ -9,6 +10,8 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
         ) {
             let objExcludeTextTags = excludeTextTags();
             //console.log(originalTextSplitted);
+            //console.log(translatedTextSplitted);
+            //console.log('---------');
             let indexesToRemove = [];
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
                 //console.log(originalTextItem);
@@ -58,22 +61,15 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                         if (originalTextItem !== translatedTextSplitted[translateIndex]) {
                             let innerHTMLPrev = tag.innerHTML;
 
-                            //TODO: добавить адекватную регулярку и обработку массива
-                            let innerTextSplittedWithDelimiters = tag.innerText.split(DELIMITER_FOR_TRANSLATED_TEXT);
-                            let innerTextSplitted = [];
-                            innerTextSplittedWithDelimiters.forEach((item) => {
-                                innerTextSplitted = [...innerTextSplitted, ...item.split(DELIMITER_TEXT)];
-                            });
-                            let innerTextSplittedFiltered = [];
-                            innerTextSplitted.forEach((item) => {
-                                item = item.replace(/\r?\n|\r/g, '').trim();
-                                if (item.length > 0) {
-                                    innerTextSplittedFiltered.push(item);
-                                }
-                            });
+                            let innerTextSplitted = splitText(tag.innerText);
+
+                            //console.log(tag);
+                            //console.log(originalTextItem);
+                            //console.log(innerTextSplitted);
+                            //console.log('------------');
 
                             /** защита от замены при которой заменяется только фрагмент предложения **/
-                            if (innerTextSplittedFiltered.includes(originalTextItem)) {
+                            if (innerTextSplitted.includes(originalTextItem)) {
                                 let translatedText = translatedTextSplitted[translateIndex].replace(/\.$/, "");
                                 /** защита от повторной замены **/
                                 let normalizedOriginalText = prepareDelimiters(tag.innerText);
@@ -81,6 +77,7 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                                     //console.log(normalizedOriginalText);
                                     //console.log(originalTextItem + '. ' + translatedText);
                                     //console.log('----------');
+
                                     tag.innerHTML = tag.innerHTML.replace(
                                         originalTextItem,
                                         originalTextItem + '. ' + translatedText
@@ -96,7 +93,6 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                             indexesToRemove.push(translateIndex);
                         }
                     }
-
                 }
             });
             indexesToRemove.forEach((index) => {

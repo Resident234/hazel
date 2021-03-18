@@ -9,14 +9,14 @@ export function prepareDelimitersBeforeSubmitToTranslation(html) {
     DELIMITER_EXCLUSION.forEach(function(item) { html.replaceAll(item, item.replaceAll(DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_FOR_EXCLUSION)); });
     return html
         .replace()
-        .replace(/\r?\n|\r/g, '')
+        .replace(/\r?\n|\r/g, '.')
         .replaceAll(DELIMITER_TEXT, DELIMITER_FOR_TRANSLATED_TEXT)
         .replace(/\.+/g, DELIMITER_FOR_TRANSLATED_TEXT);
 }
 
 export function prepareDelimiters(text) {
     text = text
-        .replace(/\r?\n|\r/g, '')
+        .replace(/\r?\n|\r/g, '.')
         .replaceAll(DELIMITER_TEXT, DELIMITER_FOR_TRANSLATED_TEXT)
         .replace(/\.+/g, DELIMITER_FOR_TRANSLATED_TEXT);
     let textItems = text.split('.');
