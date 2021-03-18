@@ -73,9 +73,9 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                                 let translatedText = translatedTextSplitted[translateIndex].replace(/\.$/, "");
                                 /** защита от повторной замены **/
                                 let normalizedOriginalText = prepareDelimiters(tag.innerText);
-                                if (!normalizedOriginalText.includes(originalTextItem + '.' + translatedText)) {
+                                if (!normalizedOriginalText.includes(originalTextItem + '.' + prepareDelimiters(translatedText))) {
                                     //console.log(normalizedOriginalText);
-                                    //console.log(originalTextItem + '. ' + translatedText);
+                                    //console.log(originalTextItem + '.' + translatedText);
                                     //console.log('----------');
 
                                     tag.innerHTML = tag.innerHTML.replace(
@@ -96,8 +96,8 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                 }
             });
             indexesToRemove.forEach((index) => {
-                originalTextSplitted.splice(index, 1);
-                translatedTextSplitted.splice(index, 1);
+                //originalTextSplitted.splice(index, 1);
+                //translatedTextSplitted.splice(index, 1);
             });
         }
     }

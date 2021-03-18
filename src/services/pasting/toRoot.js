@@ -16,16 +16,15 @@ export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted
             if (tagsMap[tagHash].originalTextSplitted.length > 0) {
                 let originalTextSplittedLocal = tagsMap[tagHash].originalTextSplitted;
                 let translatedTextSplittedLocal = [];
-                let commonIndexes = [];
                 originalTextSplittedLocal.forEach((text) => {
                     let index = originalTextSplitted.findIndex(item => item === text);
+                    //TODO: для оптимизации поиска после замены удалять элементы из originalTextSplitted
                     //console.log(Object.assign({}, originalTextSplitted));
                     //console.log(text);
                     //console.log(index);
                     //console.log('------');
                     if (translatedTextSplitted[index] !== undefined) {
                         translatedTextSplittedLocal.push(translatedTextSplitted[index]);
-                        commonIndexes.push(index);
                     } else {
                         //console.log(index);
                         //console.log(text);
@@ -40,13 +39,6 @@ export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted
                 //console.log(Object.assign({}, translatedTextSplitted));
                 //console.log('-----------');
                 initiationStrategy(tag, originalTextSplittedLocal, translatedTextSplittedLocal);
-
-                commonIndexes.forEach((index) => {
-                    //console.log(originalTextSplitted[index]);
-                    originalTextSplitted.splice(index, 1);
-                    translatedTextSplitted.splice(index, 1);
-                });
-                //console.log('--------');
             }
         });
         tagsLevel--;
