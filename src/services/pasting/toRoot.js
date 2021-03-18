@@ -1,9 +1,6 @@
 import {buildTagsLevels} from "../tagsLevels";
-import {getTagByFingerprint, getTagsFingerprints} from "../tagsFingerprint";
 import {getInitiationStrategy} from "../initiation/initiationFactory";
 import {getComponentsStrategy} from "../../components/componentsFactory";
-import {textTags} from "../tags";
-import {getTagFingerprint} from "../../../translator-extention/src/services/tagsFingerprint";
 
 export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) => {
     let tagsLevels;
@@ -15,7 +12,6 @@ export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted
     while (tagsLevel > 0) {
         tagsLevels[tagsLevel].forEach((tagHash) => {
             let tag = tagsMap[tagHash].tag;
-            console.log(tag);
             if (tagsMap[tagHash].originalTextSplitted.length > 0) {
                 let originalTextSplittedLocal = tagsMap[tagHash].originalTextSplitted;
                 let translatedTextSplittedLocal = [];
@@ -48,5 +44,3 @@ export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted
         componentStrategy();
     }
 }
-//For example, if a page has a form to allow users to add their own comments, like this page here, the form should use POST.
-//For example, if a page has a form to allow users to add their own comments, like this page here, the form should use POST

@@ -1,6 +1,5 @@
 import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT, prepareDelimiters} from "../../components/delimiters";
 import {excludeTextTags} from "../tags";
-import {getTagFingerprint} from "../tagsFingerprint";
 
 export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) => {
     if (tag && tag.innerText.length > 0) {
@@ -9,7 +8,10 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
             !tag.classList.contains('js-translator-tag-has-translated')
         ) {
             let objExcludeTextTags = excludeTextTags();
+            //console.log(originalTextSplitted);
+            let indexesToRemove = [];
             originalTextSplitted.forEach((originalTextItem, translateIndex) => {
+                //console.log(originalTextItem);
                 originalTextItem = originalTextItem.trim();
                 if (originalTextItem.length > 0) {
                     let hasTranslated = false;
@@ -35,6 +37,9 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                         });
                     }
 
+                    //console.log(originalTextItem);
+                    //console.log(isContainExcludeText);
+                    //console.log('----------');
 
                     if (
                         (
@@ -72,7 +77,10 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                                 let translatedText = translatedTextSplitted[translateIndex].replace(/\.$/, "");
                                 /** защита от повторной замены **/
                                 let normalizedOriginalText = prepareDelimiters(tag.innerText);
-                                if (normalizedOriginalText.substr(normalizedOriginalText.length - translatedText.length) !== translatedText) {
+                                if (!normalizedOriginalText.includes(originalTextItem + '.' + translatedText)) {
+                                    //console.log(normalizedOriginalText);
+                                    //console.log(originalTextItem + '. ' + translatedText);
+                                    //console.log('----------');
                                     tag.innerHTML = tag.innerHTML.replace(
                                         originalTextItem,
                                         originalTextItem + '. ' + translatedText
@@ -80,18 +88,20 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                                     hasTranslated = true;
                                     tag.classList.add('js-translator-tag-has-translated');
                                     if (innerHTMLPrev !== tag.innerHTML) {
-                                        originalTextSplitted.splice(translateIndex, 1);
-                                        translatedTextSplitted.splice(translateIndex, 1);
+                                        indexesToRemove.push(translateIndex);
                                     }
                                 }
                             }
                         } else {
-                            originalTextSplitted.splice(translateIndex, 1);
-                            translatedTextSplitted.splice(translateIndex, 1);
+                            indexesToRemove.push(translateIndex);
                         }
                     }
 
                 }
+            });
+            indexesToRemove.forEach((index) => {
+                originalTextSplitted.splice(index, 1);
+                translatedTextSplitted.splice(index, 1);
             });
         }
     }
