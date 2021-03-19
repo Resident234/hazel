@@ -34,7 +34,8 @@
   },
   "permissions": [
     "storage",
-    "webNavigation"
+    "webNavigation",
+    "https://use.typekit.net/*"
   ],
   "browser_action": {
     "default_title": "Open action bar",
