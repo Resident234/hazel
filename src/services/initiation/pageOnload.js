@@ -40,33 +40,28 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                         });
                     }
 
-                    //console.log(tag.innerHTML);
                     //console.log(originalTextItem);
                     //console.log(isContainExcludeText);
                     //console.log('----------');
 
-                    let tagInnerHTML = tag.innerHTML;
-                    let tagInnerText = tag.innerText;
-                    //tagInnerHTML = tagInnerHTML.replaceAll('  ', '');
-                    //tagInnerText = tagInnerText.replaceAll('  ', '');
                     if (
                         (
                             !isContainExcludeText &&
-                            tagInnerHTML.includes(originalTextItem) &&
-                            tagInnerText.includes(originalTextItem) &&
+                            tag.innerHTML.includes(originalTextItem) &&
+                            tag.innerText.includes(originalTextItem) &&
                             originalTextItem.length > 0
                         ) ||
                         (
                             isContainExcludeText &&
                             //tag.innerHTML.includes(originalTextItemHTML) &&
-                            tagInnerText.includes(originalTextItem) &&
+                            tag.innerText.includes(originalTextItem) &&
                             originalTextItem.length > 0
                         )
                     ) {
                         if (originalTextItem !== translatedTextSplitted[translateIndex]) {
-                            let innerHTMLPrev = tagInnerHTML;
+                            let innerHTMLPrev = tag.innerHTML;
 
-                            let innerTextSplitted = splitText(tagInnerText);
+                            let innerTextSplitted = splitText(tag.innerText);
 
                             //console.log(tag);
                             //console.log(originalTextItem);
@@ -77,19 +72,19 @@ export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) =>
                             if (innerTextSplitted.includes(originalTextItem)) {
                                 let translatedText = translatedTextSplitted[translateIndex].replace(/\.$/, "");
                                 /** защита от повторной замены **/
-                                let normalizedOriginalText = prepareDelimiters(tagInnerText);
+                                let normalizedOriginalText = prepareDelimiters(tag.innerText);
                                 if (!normalizedOriginalText.includes(originalTextItem + '.' + prepareDelimiters(translatedText))) {
                                     //console.log(normalizedOriginalText);
                                     //console.log(originalTextItem + '.' + translatedText);
                                     //console.log('----------');
 
-                                    tag.innerHTML = tagInnerHTML.replace(
+                                    tag.innerHTML = tag.innerHTML.replace(
                                         originalTextItem,
                                         originalTextItem + '. ' + translatedText
                                     );
                                     hasTranslated = true;
                                     tag.classList.add('js-translator-tag-has-translated');
-                                    if (innerHTMLPrev !== tagInnerHTML) {
+                                    if (innerHTMLPrev !== tag.innerHTML) {
                                         indexesToRemove.push(translateIndex);
                                     }
                                 }
