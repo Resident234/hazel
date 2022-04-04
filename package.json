@@ -37,10 +37,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Resident234/translator-extention.git"
+    "url": "git+https://github.com/Resident234/hazel.git"
   },
   "keywords": [],
-  "author": "Outsider",
+  "author": "Resident234",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Resident234/translator-extention/issues"

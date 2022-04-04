@@ -1,1 +1,0 @@
-export let API_KEY = 'AIzaSyAF1CytYsyI6LLYG-chkH93_4HmBjMZOVI';
