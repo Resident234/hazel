@@ -1,3 +1,3 @@
-import {messagesInitBackgroundListeners} from "./services/messages/messages";
+import { messagesInitBackgroundListeners } from './services/messages'
 
-messagesInitBackgroundListeners();
+messagesInitBackgroundListeners()

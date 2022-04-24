@@ -1,10 +1,8 @@
-import md5 from "crypto-js/md5";
-import {allTags, bodySelector} from "./tags";
-import {generateFingerprintForTag, getTagByFingerprint, getTagFingerprint} from "./tagsFingerprint";
-import {DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT, prepareDelimiters} from "../components/delimiters";
-import {sanitizeTextArray} from "./helpers";
+import { tagFingerprintService } from './tag'
+import { DELIMITER_FOR_TRANSLATED_TEXT, delimiterPrepare } from '../../components/delimiter/delimiter'
+import { helperSanitizeTextArray } from '../helper'
 
-export const buildTagsLevels = (tags, tagsNames) => {
+export const levelsBuild = (tags, tagsNames) => {
     let tagsChilds = [];
     let tagsLevels = [];
     let tagsMap = [];
@@ -13,19 +11,19 @@ export const buildTagsLevels = (tags, tagsNames) => {
     tags.forEach((tag) => {
         if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
             if (tagsNames.includes(tag.parentElement.tagName.toLowerCase())) {
-                let parentTagFingerprint = getTagFingerprint(tag.parentElement);
+                let parentTagFingerprint = tagFingerprintService('fingerprint')(tag.parentElement);
                 if (!tagsChilds[parentTagFingerprint]) {
                     tagsChilds[parentTagFingerprint] = [];
                 }
-                tagsChilds[parentTagFingerprint].push(getTagFingerprint(tag));
+                tagsChilds[parentTagFingerprint].push(tagFingerprintService('fingerprint')(tag));
             } else if (bodySelector() === tag.parentElement.tagName.toLowerCase()) {
-                tagsLevels[0].push(getTagFingerprint(tag));
+                tagsLevels[0].push(tagFingerprintService('fingerprint')(tag));
             }
             let text = tag.innerText;
-            text = prepareDelimiters(text);
+            text = delimiterPrepare(text);
             text = text.split(DELIMITER_FOR_TRANSLATED_TEXT);
-            text = sanitizeTextArray(text);
-            tagsMap[getTagFingerprint(tag)] = {
+            text = helperSanitizeTextArray(text);
+            tagsMap[tagFingerprintService('fingerprint')(tag)] = {
                 originalTextSplitted: text,
                 tag: tag
             };
@@ -33,7 +31,6 @@ export const buildTagsLevels = (tags, tagsNames) => {
     });
     let level = 0;
 
-    //console.log(tagsMap);
     while (1) {
         if (tagsLevels[level]) {
             tagsLevels[level].forEach((tagHash) => {

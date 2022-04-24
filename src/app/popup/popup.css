@@ -13379,7 +13379,7 @@ body .fc {
     background: #d7d7d7;
 }
 
-/* Buttons (styled <button> tags, normalized to work cross-browser)
+/* Buttons (styled <button> tag, normalized to work cross-browser)
 --------------------------------------------------------------------------------------------------*/
 .fc button {
     /* force height to include the border and padding */
@@ -14312,7 +14312,7 @@ NOTE: use percentage font sizes or else old IE chokes
 /* Global Event Styles
 --------------------------------------------------------------------------------------------------*/
 .ui-widget .fc-event {
-    /* overpower jqui's styles on <a> tags. TODO: more DRY */
+    /* overpower jqui's styles on <a> tag. TODO: more DRY */
     color: #ffffff;
     /* default TEXT color */
     text-decoration: none;

@@ -1,6 +1,6 @@
 import {getTagByFingerprint, getTagFingerprint} from "../tagsFingerprint";
-import {buildTagsLevels} from "../tagsLevels";
-import {prepareDelimiters} from "../../components/delimiters";
+import {buildTagsLevels} from "../levels";
+import {prepareDelimiters} from "../../components/delimiter";
 import {getInitiationStrategy} from "../initiation/initiationFactory";
 import {getComponentsStrategy} from "../../components/componentsFactory";
 

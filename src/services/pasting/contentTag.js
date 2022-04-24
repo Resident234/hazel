@@ -1,16 +1,15 @@
-import {tags} from "../tags";
-import {getInitiationStrategy} from "../initiation/initiationFactory";
-import {getComponentsStrategy} from "../../components/componentsFactory";
+import { getInitiationStrategy } from '../initiation/initiationFactory'
+import { getComponentInitiation } from '../../components/initiation/componentsFactory'
 
 export const contentTag = (objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) => {
-    let initiationStrategy = getInitiationStrategy(settings.initiation);
-    objTextTags.forEach((tag) => {
-        if (tag.className.includes('content')) {
-            initiationStrategy(tag, originalTextSplitted, translatedTextSplitted);
-        }
-    });
-    let componentStrategy = getComponentsStrategy(settings.initiation);
-    if (componentStrategy) {
-        componentStrategy();
+  let initiationStrategy = getInitiationStrategy(settings.initiation)
+  objTextTags.forEach((tag) => {
+    if (tag.className.includes('content')) {
+      initiationStrategy(tag, originalTextSplitted, translatedTextSplitted)
     }
+  })
+  let componentStrategy = getComponentInitiation(settings.initiation)
+  if (componentStrategy) {
+    componentStrategy()
+  }
 }

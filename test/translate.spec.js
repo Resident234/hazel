@@ -16,7 +16,7 @@ describe('normalizeMarkdownSyntax', () => {
     expect(result).to.equal('> * Chris가 마지막으로 발표 한 버전은 2015 년 4 월 1 일 v1.8.1이었습니다.');
   });
 
-  it('should fix broken attribute of tags', () => {
+  it('should fix broken attribute of tag', () => {
     const text = '<g-emoji alias = "+ 1"fallback-src = "https://assets-cdn.github.com/images/icons/emoji/unicode/1f44d.png"ios-version = "6.0">< g-emoji>';
     const result = normalizeMarkdownSyntax(text);
     expect(result).to.equal('<g-emoji alias = "+ 1" fallback-src = "https://assets-cdn.github.com/images/icons/emoji/unicode/1f44d.png" ios-version = "6.0">< g-emoji>');
@@ -64,7 +64,7 @@ describe('normalizeMarkdownSyntax', () => {
     expect(result).to.equal('FYI - 이전 디버그 구현은 V8 ~~5.8~~까지 지연되었습니다.');
   });
 
-  it('should fix broken HTML closing tags', () => {
+  it('should fix broken HTML closing tag', () => {
     const text = '</ g - emoji>';
     const result = normalizeMarkdownSyntax(text);
     expect(result).to.equal('</g-emoji>');
@@ -160,7 +160,7 @@ describe('restoreImagesAndLinks', () => {
 });
 
 describe('stripTags', () => {
-  it('should remove <g-emoji> tags', () => {
+  it('should remove <g-emoji> tag', () => {
     const text = '</p>EventEmitters with Observables <g-emoji alias="+1" ' +
                  'fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f44d.png" ' +
                  'ios-version="6.0">👍</g-emoji></p>';
