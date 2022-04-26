@@ -34,7 +34,8 @@
     "copy-files": "cpy src/background.js src/manifest.json src/app/options/options.js src/app/popup/popup.js src/popup_utils.js  src/*.content.js icons/*.png src/*.html src/*.css dist",
     "prebuild": "npm run clean && npm run copy-files",
     "prebuild:prod": "npm run clean && npm run copy-files",
-    "copy-options": "cpy src/app/options/* dist"
+    "copy-options": "cpy src/app/options/* dist",
+    "copy-manifest": "cpy src/manifest.json dist"
   },
   "repository": {
     "type": "git",

@@ -3,7 +3,7 @@
   "name": "HAZEL",
   "version": "0.5.1",
   "description": "On-page text translator",
-  "homepage_url": "https://github.com/Resident234/translator-extention",
+  "homepage_url": "https://github.com/Resident234/hazel",
   "icons": {
     "16": "cropped-logo_dark@2x-32x32.png",
     "48": "cropped-logo_dark@2x-180x180.png",
@@ -23,11 +23,6 @@
       "run_at": "document_end"
     }
   ],
-  "options_ui": {
-    "page": "options.html",
-    "chrome_style": true,
-    "open_in_tab": true
-  },
   "background": {
     "scripts": ["background.js"],
     "persistent": false
