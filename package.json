@@ -33,7 +33,8 @@
     "clean": "rimraf dist",
     "copy-files": "cpy src/background.js src/manifest.json src/app/options/options.js src/app/popup/popup.js src/popup_utils.js  src/*.content.js icons/*.png src/*.html src/*.css dist",
     "prebuild": "npm run clean && npm run copy-files",
-    "prebuild:prod": "npm run clean && npm run copy-files"
+    "prebuild:prod": "npm run clean && npm run copy-files",
+    "copy-options": "cpy src/app/options/* dist"
   },
   "repository": {
     "type": "git",
@@ -43,7 +44,7 @@
   "author": "Resident234",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Resident234/translator-extention/issues"
+    "url": "https://github.com/Resident234/hazel/issues"
   },
-  "homepage": "https://github.com/Resident234/translator-extention/blob/master/README.adoc"
+  "homepage": "https://github.com/Resident234/hazel/blob/master/README.adoc"
 }

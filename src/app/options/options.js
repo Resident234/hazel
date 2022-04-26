@@ -1,5 +1,6 @@
 // Saves options to chrome.storage
-import { settingsGet, settingsSet } from '../../settings/settings'
+
+import { settingsGet, settingsSet } from '../../services/settings'
 
 function save_options () {
   settingsSet({
@@ -29,5 +30,4 @@ function restore_options () {
 
 document.addEventListener('DOMContentLoaded', restore_options)
 document.getElementById('save').addEventListener('click', save_options)
-document.getElementById('pasting').addEventListener('change', selector_toggle)
 
