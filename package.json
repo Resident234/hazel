@@ -1,7 +1,7 @@
 {
-  "name": "translator-extention",
+  "name": "HAZEL",
   "version": "0.4.0",
-  "description": "Translator",
+  "description": "",
   "main": "background.js",
   "private": true,
   "dependencies": {
