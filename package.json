@@ -1,14 +1,12 @@
 {
   "name": "HAZEL",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "",
   "main": "background.js",
   "private": true,
   "dependencies": {
     "crypto-js": "^4.0.0",
-    "escape-string-regexp": "^1.0.5",
-    "markdown-it": "^8.2.2",
-    "to-markdown": "^3.0.3"
+    "escape-string-regexp": "^1.0.5"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -35,7 +33,8 @@
     "prebuild": "npm run clean && npm run copy-files",
     "prebuild:prod": "npm run clean && npm run copy-files",
     "copy-options": "cpy src/app/options/* dist",
-    "copy-manifest": "cpy src/manifest.json dist"
+    "copy-manifest": "cpy src/manifest.json dist",
+    "copy-popup": "cpy src/app/popup/* dist"
   },
   "repository": {
     "type": "git",

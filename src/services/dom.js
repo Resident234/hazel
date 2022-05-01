@@ -21,7 +21,7 @@ export const domHasIsTranslated = () => {
  * @param {string} elementName
  */
 export const domElement = (elementName) => {
-  let elements = document.getElementsByClassName('js-' + elementName)
+  let elements = document.getElementsByClassName('js-hazel--' + elementName)
   if (elements) {
     return elements[0]
   } else {
