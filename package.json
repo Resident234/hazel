@@ -32,9 +32,9 @@
     "prebuild": "npm run clean && npm run copy-files",
     "prebuild:prod": "npm run clean && npm run copy-files",
     "copy-files": "npm run copy-main && npm run copy-options && npm run copy-manifest && npm run copy-popup",
-    "copy-options": "cpy src/app/options/* dist",
+    "copy-options": "cpy src/app/options/*.html src/app/options/*.css dist",
     "copy-manifest": "cpy src/manifest.json dist",
-    "copy-popup": "cpy src/app/popup/* dist",
+    "copy-popup": "cpy src/app/popup/*.html src/app/popup/*.css dist",
     "copy-main": "cpy src/background.js icons/*.png src/app/bootstrap.css src/**/*.min.js dist"
   },
   "repository": {
