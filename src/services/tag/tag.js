@@ -41,14 +41,14 @@ export const tag = [
   'footer',
   'clipboard-copy',
 ]
+export const tagExclude = ['code']
+
 export const tagSelector = () => {
   return tag.map((t) => {
-    return '' + t + ':not(.js-translator-component-element)'
-  })
-    .concat(tag.map((t) => {
-      return '' + t + ':not(.js-translator-component-element)'
-    }))
-    .join(', ')
+    return '' + t + ':not(.js-hazel--component-element)'
+  }).concat(tag.map((t) => {
+    return '' + t + ':not(.js-hazel--component-element)'
+  })).join(', ')
 }
 
 export const tagBodySelector = () => {
@@ -63,15 +63,12 @@ export const tagBody = () => {
   return document.querySelector(tagBodySelector())
 }
 
-export const tagExclude = ['code']
 export const tagExcludeSelector = () => {
   return tagExclude.map((t) => {
     return '' + t
-  })
-    .concat(tagExclude.map((t) => {
-      return '' + t
-    }))
-    .join(', ')
+  }).concat(tagExclude.map((t) => {
+    return '' + t
+  })).join(', ')
 }
 export const tagExcludeText = () => {
   return document.querySelectorAll(tagExcludeSelector())

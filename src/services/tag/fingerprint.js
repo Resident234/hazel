@@ -1,21 +1,16 @@
-import { textTags } from './tag'
 import md5 from 'crypto-js/md5'
 
-export const getTag = (tagHash, tags) => {
-  var tagsFingerprints = (function () {
-    var tagsFingerprints = []
-    tags.forEach((tag) => {
-      let fingerprint = concatenateTagParams(tag)
-      let hash = md5(fingerprint)
-      tagsFingerprints[hash.toString()] = tag
-    })
-    return function () { return tagsFingerprints }
-  })()
-  return tagsFingerprints()[tagHash]
+export const fingerprintGetTag = (tagHash, tags) => {
+  let fungerprints = fingerprints(tags)
+  if (fungerprints) {
+    return fungerprints[tagHash]
+  } else {
+    return null
+  }
 }
 
 export const fingerprints = (tags) => {
-  var tagsFingerprints = []
+  const tagsFingerprints = []
   tags.forEach((tag) => {
     let fingerprint = concatenateTagParams(tag)
     let hash = md5(fingerprint)

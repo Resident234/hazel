@@ -1,7 +1,8 @@
-let settingsDefault = {
-  apiKey: 'AIzaSyAF1CytYsyI6LLYG-chkH93_4HmBjMZOVI',//todo не хранить в репе , запрашивать с внешнего источника
-  language: 'lang',
+const settingsDefault = {
+  languageSource: 'en',
+  languageTarget: 'ru',
 }
+
 const getStorageData = key => {
   return new Promise((resolve, reject) =>
     chrome.storage.sync.get(key, result =>
@@ -20,8 +21,12 @@ const getStorageData = key => {
   )
 }
 
-export async function settingsGet () {
+export async function settingsGetAll () {
   return await getStorageData(settingsDefault)
+}
+
+export async function settingsGet (key) {
+  return await getStorageData(key)
 }
 
 export async function settingsSet (data) {

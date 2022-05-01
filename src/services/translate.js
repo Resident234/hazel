@@ -11,31 +11,36 @@ import {
   helperSanitizeTextArray
 } from './helper'
 import { domInsertText2Page } from './dom'
+import { config } from './config'
+import { settingsGet } from './settings'
 
-export const translate = (text, API_KEY, LANGUAGE) => {
+export const translate = (text) => {
   const options = {
     method: 'POST',
-    body: `key=${API_KEY}&q=${encodeURIComponent(text)}&source=en&target=${LANGUAGE}&model=nmt&format=text`, // `format=text` keeps new line characters
+    body: `key=${config.apiKey}&q=${encodeURIComponent(text)}&source=${settingsGet('languageSource')}&target=${settingsGet('languageTarget')}&model=nmt&format=text`, // `format=text` keeps new line characters
     headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;' }
   }
 
   return fetch(`https://translation.googleapis.com/language/translate/v2/`, options)
     .then((response) => {
       if (response.status !== 200) {
-        console.log(`Google Translation error: ${response.status}`)
+        throw new Error(`Google Translation error: ${response.status}`)
         return
       }
       return response.json()
     })
 }
 
-export const translateRun = (settings) => {
+export const translateRun = () => {
   spinnerShow()
   const objTextTags = tagText()
   if (!objTextTags.length) {
     spinnerHide()
     return
   }
+  return
+
+  /*
   delimiterInsertOnDOM(objTextTags)
 
   let objBodyTag = document.querySelector(tagBodySelector())
@@ -53,7 +58,7 @@ export const translateRun = (settings) => {
       const delay = 1000
       setTimeout(resolve, delay)
     }).then(() => {
-      return translate(c, settings.apiKey, settings.lang)
+      return translate(c)
     })
   })
 
@@ -64,7 +69,7 @@ export const translateRun = (settings) => {
         domInsertText2Page(pageTextSplitted, pageTranslatedTextSplitted, settings)
       }
       delimiterHideOnDOM()
-      spinnerHide()
+      //spinnerHide()
     }, () => {
-    })
+    })*/
 }
