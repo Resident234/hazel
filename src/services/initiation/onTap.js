@@ -1,8 +1,8 @@
-/**
- * @deprecated
- */
 import { DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_TEXT } from '../../components/delimiter/delimiter'
 
+/**
+ * @ignore
+ */
 export const onTap = (tag, originalTextSplitted, translatedTextSplitted) => {
   if (tag && tag.innerText.length > 0) {
     if (!tag.classList.contains('js-translator-delimiter')) {

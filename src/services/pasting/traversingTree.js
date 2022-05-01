@@ -4,6 +4,9 @@ import {prepareDelimiters} from "../../components/delimiter";
 import {getInitiationStrategy} from "../initiation/initiationFactory";
 import {getComponentsStrategy} from "../../components/componentsFactory";
 
+/**
+ * @ignore
+ */
 export const traversingTree = (objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) => {
     let tagsChilds = [];
     let tagsHashTextMap = [];

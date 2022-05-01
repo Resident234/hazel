@@ -1,6 +1,5 @@
-
 /**
- * @deprecated
+ * @ignore
  */
 export const onHover = (tag, originalTextSplitted, translatedTextSplitted) => {
   if (tag && tag.innerText.length > 0) {

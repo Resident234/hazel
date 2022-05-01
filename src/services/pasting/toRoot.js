@@ -3,7 +3,7 @@ import { getInitiationStrategy } from '../initiation/initiationFactory'
 import { tagLevelsService } from '../tag/tag'
 
 /**
- * @deprecated
+ * @ignore
  */
 export const toRoot = (objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) => {
     let tagsLevels;

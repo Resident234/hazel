@@ -1,5 +1,8 @@
 import { tagBody } from '../../services/tag/tag'
 
+/**
+ * @ignore
+ */
 export const tap = () => {
   const elements = document.getElementsByTagName('tap')
   for (let element of elements) {

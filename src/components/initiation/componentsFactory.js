@@ -1,3 +1,8 @@
+/**
+ * @ignore
+ * @param name
+ * @returns {boolean}
+ */
 export const getComponentInitiation = (name) => {
-  return (name === undefined) ? false : name.function
+  return name?.function ?? false
 }

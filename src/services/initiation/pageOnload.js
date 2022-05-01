@@ -1,10 +1,10 @@
-/**
- * @deprecated
- */
 import { tagExcludeText } from '../tag/tag'
 import { helperSplitText } from '../helper'
 import { delimiterPrepare } from '../../components/delimiter/delimiter'
 
+/**
+ * @ignore
+ */
 export const pageOnload = (tag, originalTextSplitted, translatedTextSplitted) => {
   if (tag && tag.innerText.length > 0) {
     if (

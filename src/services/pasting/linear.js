@@ -2,7 +2,7 @@ import { getInitiationStrategy } from '../initiation/initiationFactory'
 import { getComponentInitiation } from '../../components/initiation/componentsFactory'
 
 /**
- * @deprecated
+ * @ignore
  */
 export const linear = (objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) => {
     let initiationStrategy = getInitiationStrategy(settings.initiation);

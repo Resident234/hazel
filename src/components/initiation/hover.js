@@ -1,5 +1,8 @@
 import { tagBody } from '../../services/tag/tag'
 
+/**
+ * @ignore
+ */
 export const hover = () => {
   const elements = document.getElementsByTagName('hover')
   for (let element of elements) {

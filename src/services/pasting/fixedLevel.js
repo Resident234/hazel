@@ -1,11 +1,11 @@
-/**
- * @deprecated
- */
 import { getInitiationStrategy } from '../initiation/initiationFactory'
 import { tagFingerprintService } from '../tag/tag'
 import { getTag } from '../tag/fingerprint'
 import { getComponentInitiation } from '../../components/initiation/componentsFactory'
 
+/**
+ * @ignore
+ */
 export const fixedLevel = (objTextTags, originalTextSplitted, translatedTextSplitted, tags, settings) => {
     let tagsLevels = buildTagsLevels(objTextTags, tags);
     if (tagsLevels[settings.tagLevel]) {
