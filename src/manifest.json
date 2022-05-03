@@ -16,8 +16,8 @@
       ],
       "js": [
         "translator.js",
-        "jquery.min.content.js",
-        "typed.min.content.js"
+        "jquery.min.js",
+        "typed.min.js"
       ],
       "css": ["style.css"],
       "run_at": "document_end"

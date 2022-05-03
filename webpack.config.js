@@ -19,7 +19,7 @@ module.exports = env => {
       path: resolve(__dirname, 'dist'),
       pathinfo: !env.prod,
     },
-    devtool: env.prod ? 'source-map' : 'eval',
+    devtool: env.prod ? 'source-map' : 'cheap-module-source-map',
     module: {
       rules: [
         {
