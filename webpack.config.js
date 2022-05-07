@@ -7,6 +7,7 @@ module.exports = env => {
       'translator.js': './src/app.js',
       'options.js': './src/app/options/options.js',
       'popup.js': './src/app/popup/popup.js',
+      'background.js': './src/background.js',
       'style.css': [
         './src/app/style.css',
         './src/components/delimiter/style.css',
