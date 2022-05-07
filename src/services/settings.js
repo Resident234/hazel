@@ -1,15 +1,19 @@
 const settingsDefault = {
   languageSource: 'en',
   languageTarget: 'ru',
+  initiation: 'onPopupTap',
 }
 
 const getStorageData = key => {
   return new Promise((resolve, reject) =>
-    chrome.storage.sync.get(key, result =>
-      chrome.runtime.lastError
-        ? reject(Error(chrome.runtime.lastError.message))
-        : resolve(result)
-    )
+    resolve(settingsDefault[key])
+      /*
+      chrome.storage.sync.get(key, result =>
+        chrome.runtime.lastError
+          ? reject(Error(chrome.runtime.lastError.message))
+          : resolve(result)
+      )
+      */
   )
 }, setStorageData = data => {
   return new Promise((resolve, reject) =>

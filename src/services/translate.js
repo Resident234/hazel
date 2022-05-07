@@ -32,6 +32,7 @@ export const translate = (text) => {
 }
 
 export const translateRun = () => {
+  console.log('translateRun')
   spinnerShow()
   const objTextTags = tagText()
   if (!objTextTags.length) {
@@ -69,7 +70,7 @@ export const translateRun = () => {
         domInsertText2Page(pageTextSplitted, pageTranslatedTextSplitted, settings)
       }
       delimiterHideOnDOM()
-      //spinnerHide()
+      spinnerHide()
     }, () => {
     })*/
 }

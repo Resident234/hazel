@@ -1,1 +1,5 @@
-export const onPopupTap = () => {}
+import { messagesInitAppListeners } from '../messages'
+
+export const onPopupTap = () => {
+  messagesInitAppListeners()
+}

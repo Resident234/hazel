@@ -30,6 +30,7 @@
     "validate-webpack:dev": "webpack-validator webpack.config.js --env.dev",
     "validate-webpack:prod": "webpack-validator webpack.config.js --env.prod",
     "build": "npm run clean && npm run copy-files && webpack --env.dev",
+    "build-webpack": "webpack --env.dev",
     "build:prod": "webpack --env.prod -p",
     "clean": "rimraf dist",
     "prebuild": "npm run clean && npm run copy-files",
