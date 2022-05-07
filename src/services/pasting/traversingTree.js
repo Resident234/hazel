@@ -11,7 +11,7 @@ export const traversingTree = (objTextTags, originalTextSplitted, translatedText
     let tagsChilds = [];
     let tagsHashTextMap = [];
     objTextTags.forEach((tag) => {
-        if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
+        if (tag.innerText.length > 0 && !tag.className.includes('js-hazel--spinner')) {
             tagsHashTextMap[getTagFingerprint(tag)] = tag.innerText;
             if (tags.includes(tag.parentElement.tagName.toLowerCase())) {
                 let parentTagFingerprint = getTagFingerprint(tag.parentElement);

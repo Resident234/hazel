@@ -1,4 +1,4 @@
-export const tag = [
+const tag = [
   'p',
   'blockquote',
   'pre',
@@ -41,7 +41,7 @@ export const tag = [
   'footer',
   'clipboard-copy',
 ]
-export const tagExclude = ['code']
+const tagExclude = ['code']
 
 export const tagSelector = () => {
   return tag.map((t) => {
@@ -51,7 +51,7 @@ export const tagSelector = () => {
   })).join(', ')
 }
 
-export const tagBodySelector = () => {
+const tagBodySelector = () => {
   return 'body'
 }
 

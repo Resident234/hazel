@@ -1,6 +1,8 @@
+const SPINNER_TEXT_LENGTH = 50//todo длину сомволов сделать зависимой от ширины экрана
+
 const spinner = () => {
   const spinner = document.createElement('div')
-  spinner.className = 'js-translator-spinner translator-spinner js-translator-component-element'
+  spinner.className = 'js-hazel--spinner hazel--spinner js-translator-component-element'
   spinner.innerHTML = '<div id="uvc-type-wrap-1980"  ' +
     'data-ultimate-target=\'#uvc-type-wrap-1980\'  ' +
     'data-responsive-json-new=\'{"font-size":"desktop:45px;","line-height":"desktop:56px;"}\'  ' +
@@ -18,16 +20,18 @@ const spinner = () => {
   return spinner
 }
 
-export const spinnerShow = () => {
+export const spinnerShow = (strings) => {
+  strings = strings.map(name => name.toUpperCase())
+  strings = strings.map(name => name.length > SPINNER_TEXT_LENGTH ? name.substring(0, SPINNER_TEXT_LENGTH) + '...' : name)
   document.querySelector('body').appendChild(spinner())
   jQuery(function ($) {
     if (typeof jQuery('#typed-31290215265fdf3912d95f8').typed == 'function') {
       $('#typed-31290215265fdf3912d95f8').typed({
-        strings: ['Please wait'.toUpperCase(), 'Text translation in progress'.toUpperCase()],
-        typeSpeed: 30,
-        backSpeed: 30,
+        strings: strings,
+        typeSpeed: 0.2,
+        backSpeed: 0.1,
         startDelay: 0,
-        backDelay: 3500,
+        backDelay: 100,
         loop: true,
         loopCount: false,
         showCursor: true,
@@ -39,6 +43,6 @@ export const spinnerShow = () => {
 }
 
 export const spinnerHide = () => {
-  let spinner = document.querySelector('.js-translator-spinner')
+  let spinner = document.querySelector('.js-hazel--spinner')
   spinner.className += ' hide'
 }

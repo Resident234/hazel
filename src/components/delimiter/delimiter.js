@@ -1,15 +1,15 @@
-const DELIMITER_CLASS = 'js-translator-delimiter'
-export const DELIMITER_HTML = `<delimiter class="${DELIMITER_CLASS} translator-delimiter"><-></delimiter>`
-export const DELIMITER_TEXT = '<->'//TODO: подобрать более подходящий уникальный символ
-export const DELIMITER_FOR_TRANSLATED_TEXT = '.'
-export const DELIMITER_EXCLUSION = ['Node.js']
-export const DELIMITER_FOR_EXCLUSION = '_'
+const DELIMITER_CLASS = 'js-hazel--delimiter'
+const DELIMITER_TEXT = '<--hazel-delimiter-->'
+const DELIMITER_HTML = `<delimiter class="${DELIMITER_CLASS} translator-delimiter">${DELIMITER_TEXT}</delimiter>`
+const DELIMITER_FOR_TRANSLATED_TEXT = '.'
+const DELIMITER_EXCLUSION = ['Node.js']
+const DELIMITER_FOR_EXCLUSION = '_'
 
 export const delimiterPrepareBeforeSubmitToTranslation = (html) => {
   DELIMITER_EXCLUSION.forEach(function (item) { html.replaceAll(item, item.replaceAll(DELIMITER_FOR_TRANSLATED_TEXT, DELIMITER_FOR_EXCLUSION)) })
   return html
     .replace()
-    .replace(/\r?\n|\r/g, '.')
+    .replace(/\r?\n|\r/g, DELIMITER_FOR_TRANSLATED_TEXT)
     .replaceAll(DELIMITER_TEXT, DELIMITER_FOR_TRANSLATED_TEXT)
     .replace(/\.+/g, DELIMITER_FOR_TRANSLATED_TEXT)
 }
@@ -33,7 +33,7 @@ export const delimiterPrepare = (text) => {
 }
 
 export const delimiterHideOnDOM = () => {
-  let divsToHide = document.getElementsByClassName(DELIMITER_CLASS)
+  let divsToHide = getDelimiters()
   for (let i = 0; i < divsToHide.length; i++) {
     divsToHide[i].className = divsToHide[i].className + ' hide'
   }
@@ -46,9 +46,17 @@ export const delimiterInsertOnDOM = (objTextTags) => {
       tag.insertAdjacentHTML('afterbegin', DELIMITER_HTML)
     }
   })
-  let delimiters = document.getElementsByClassName(DELIMITER_CLASS)
+  let delimiters = getDelimiters()
   for (let i = 0; i < delimiters.length; i++) {
     delimiters[i].style.display = 'none'
     delimiters[i].style.color = 'transparent'
   }
+}
+
+export const delimiterSplitText = (text) => {
+  return text.split(DELIMITER_FOR_TRANSLATED_TEXT)
+}
+
+const getDelimiters = () => {
+  return document.getElementsByClassName(DELIMITER_CLASS)
 }

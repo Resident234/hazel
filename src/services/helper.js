@@ -13,15 +13,9 @@ export const helperPrepareTranslatedText = (text) => {
 
 export const helperSanitizeTextArray = (text) => {
   text = text.filter(item => item)
-  text = text.filter((item) => item.trim() !== '')
-  let textPrepared = []
-  text.forEach((item) => {
-    item = item.replace('↵', '')
-    item = item.replace(/\r?\n|\r/g, '')
-    textPrepared.push(item.trim())
-  })
-  text = textPrepared
-  text = text.filter((item) => item.trim() !== '')
+  text = text.map(item => item.replace('↵', ''))
+  text = text.map(item => item.replace(/\r?\n|\r/g, ''))
+  text = text.filter(item => item.trim() !== '')
   return text
 }
 

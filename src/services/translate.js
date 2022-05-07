@@ -1,9 +1,9 @@
 import { spinnerHide, spinnerShow } from '../components/spinner/spinner'
-import { tagBodySelector, tagText } from './tag/tag'
+import { tagBody, tagText } from './tag/tag'
 import {
   DELIMITER_FOR_TRANSLATED_TEXT, delimiterHideOnDOM,
   delimiterInsertOnDOM,
-  delimiterPrepareBeforeSubmitToTranslation
+  delimiterPrepareBeforeSubmitToTranslation, delimiterSplitText
 } from '../components/delimiter/delimiter'
 import {
   helperPrepareTextBeforeSubmitToTranslation,
@@ -32,26 +32,21 @@ export const translate = (text) => {
 }
 
 export const translateRun = () => {
-  console.log('translateRun')
-  spinnerShow()
   const objTextTags = tagText()
   if (!objTextTags.length) {
-    spinnerHide()
     return
   }
-  return
-
-  /*
   delimiterInsertOnDOM(objTextTags)
-
-  let objBodyTag = document.querySelector(tagBodySelector())
+  let objBodyTag = tagBody()
   let pageText = objBodyTag.innerText
   pageText = helperPrepareTextBeforeSubmitToTranslation(pageText)
   pageText = delimiterPrepareBeforeSubmitToTranslation(pageText)
-  let pageTextSplitted = pageText.split(DELIMITER_FOR_TRANSLATED_TEXT)
+  let pageTextSplitted = delimiterSplitText(pageText)
   pageTextSplitted = helperSanitizeTextArray(pageTextSplitted)
-
+  spinnerShow(pageTextSplitted)
   //TODO: обойти проблему https://bugs.chromium.org/p/chromium/issues/detail?id=108055
+
+  /*
   const promises = pageTextSplitted.map((c) => {
     return new Promise((resolve) => {
       // make some delay because the maximum rate limit of Google API is 10 qps per IP address.

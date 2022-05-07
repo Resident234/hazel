@@ -9,7 +9,7 @@ export const levelsBuild = (tags, tagsNames) => {
 
     tagsLevels[0] = [];
     tags.forEach((tag) => {
-        if (tag.innerText.length > 0 && !tag.className.includes('js-translator-spinner')) {
+        if (tag.innerText.length > 0 && !tag.className.includes('js-hazel--spinner')) {
             if (tagsNames.includes(tag.parentElement.tagName.toLowerCase())) {
                 let parentTagFingerprint = tagFingerprintService('fingerprint')(tag.parentElement);
                 if (!tagsChilds[parentTagFingerprint]) {
