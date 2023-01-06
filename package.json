@@ -20,7 +20,7 @@
     "mocha": "^3.2.0",
     "npm-run-all": "^4.0.1",
     "rimraf": "^2.5.4",
-    "webpack": "^2.2.0",
+    "webpack": "^2.7.0",
     "css-loader": "~0.28.0",
     "style-loader": "~0.23.0"
   },
